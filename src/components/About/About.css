@@ -43,3 +43,24 @@
 .about__text:last-of-type {
   margin: 0;
 }
+
+@media screen and (max-width: 810px) {
+  .about__photo {
+    height: 232px;
+    width: 232px;
+    border-radius: 50%;
+    margin: 61px 32px 61px 40px;
+  }
+  .about__text-wrapper {
+    margin: 40px 0 72px;
+  }
+  .about__title {
+    font-size: 30px;
+    line-height: 40px;
+    max-width: 424px;
+    margin-bottom: 16px;
+  }
+  .about__text_wrapper {
+    max-width: 424px;
+  }
+}
