@@ -1,3 +1,88 @@
 .main {
+  background: url('../../images/main_bg.jpg') no-repeat center;
+  background-size: cover;
+  max-height: 576px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+/* Блок формы */
+
+.main__content {
+  max-width: 608px;
+  display: flex;
+  flex-direction: column;
+}
+
+.main__title {
+  font-family: 'Roboto Slab', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 60px;
+  line-height: 64px;
+  color: white;
+  max-width: 100%;
+  margin: 160px auto 32px;
+}
+
+.main__subtitle {
+  max-width: 545px;
+  margin: 0 0 64px;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.main__form {
+  max-width: 608px;
+  width: 100%;
+  margin: 0 auto 80px;
+  height: 64px;
+  display: flex;
+  flex-direction: row;
+  border-radius: 100px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.main__form_input {
+  margin: 0 0 0 25px;
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  color: #1A1B22;
+  caret-color: #2F71E5;
+}
+
+.main__form_input:focus {
+  outline: none;
+}
+
+.main__form_submit-button {
+  background-color: #2F71E5;
+  color: white;
+  border-radius: 100px;
+  padding: 0 53px;
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.main__form_submit-button:hover {
+  background-color: #347EFF;
+}
+
+.main__form_submit-button:active {
+  background-color: #2A65CC;
 }

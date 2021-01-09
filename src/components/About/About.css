@@ -1,3 +1,45 @@
 .about {
+  display: flex;
+  flex-direction: row;
+}
 
+.about__photo {
+  height: 464px;
+  width: 464px;
+  border-radius: 50%;
+  margin: 80px 56px 80px 104px;
+}
+
+.about__text-wrapper {
+  margin: 131px 0 279px;
+}
+
+.about__title {
+  font-family: 'Roboto Slab', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 46px;
+  color: black;
+  max-width: 496px;
+  margin: 0 0 24px;
+}
+
+.about__text_wrapper {
+  max-width: 600px;
+}
+
+.about__text {
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  color: #1A1B22;
+  padding: 0;
+  margin: 0 0 15px;
+}
+
+.about__text:last-of-type {
+  margin: 0;
 }
