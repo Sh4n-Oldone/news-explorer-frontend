@@ -86,3 +86,26 @@
 .main__form_submit-button:active {
   background-color: #2A65CC;
 }
+
+@media screen and (max-width: 810px) {
+  .main {
+    max-height: 400px;
+  }
+  .main__content {
+    max-width: 452px;
+  }
+  .main__title {
+    max-width: 385px;
+    margin: 104px auto 16px 0;
+    font-size: 36px;
+    line-height: 40px;
+  }
+  .main__subtitle {
+    margin-bottom: 48px;
+    font-size: 16px;
+  }
+  .main__form {
+    height: 56px;
+    margin-bottom: 48px;
+  }
+}
