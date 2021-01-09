@@ -62,5 +62,22 @@
 }
 
 .footer__link_linkedin {
-  
+  margin-right: 0;
+}
+
+@media screen and (max-width: 810px) {
+  .footer {
+    height: 64px;
+    padding: 0 40px;
+  }
+  .footer__copyright {
+    text-align: center;
+    max-width: 300px;
+  }
+  .footer__links_item {
+    padding: 0 10px;
+  }
+  .footer__links_item:last-of-type {
+    margin-right: 24px;
+  }
 }
