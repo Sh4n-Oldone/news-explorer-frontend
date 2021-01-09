@@ -82,3 +82,20 @@
 .nav__link_not-active:hover {
   color: #000;
 }
+
+@media screen and (max-width: 810px) {
+  .nav {
+    margin-right: 40px;
+  }
+  .nav__wrapper {
+    height: 66px;
+  }
+  .nav__link {
+    height: 66px;
+    margin-right: 16px;
+  }
+  .nav__link_auth {
+    padding: 8px;
+    font-size: 16px;
+  }
+}

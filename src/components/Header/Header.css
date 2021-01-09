@@ -29,3 +29,12 @@
 .header__title_dark-mode {
   color: black;
 }
+
+@media screen and (max-width: 810px) {
+  .header {
+    height: 66px;
+  }
+  .header__title {
+    margin-left: 40px;
+  }
+}

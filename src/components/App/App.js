@@ -153,7 +153,7 @@ export default function App() {
   }
 
   function handleSaveCardClick() {
-    // При клике на иконку сохранения меняется
+    // Карточка добавляется в сохранённые
   }
 
   return (
