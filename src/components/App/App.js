@@ -25,8 +25,8 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   // Для тестирования перевести нужные дефолтные значения стейтов в true
-  const [loaderVisibility, setLoaderVisibility] = useState(false);
-  const [newsVisibility, setNewsVisibility] = useState(true);
+  const [loaderVisibility, setLoaderVisibility] = useState(true);
+  const [newsVisibility, setNewsVisibility] = useState(false);
   const [newsNotFoundVisibility, setNewsNotFoundVisibility] = useState(false);
 
   // При дальнейшей разработке заменить дефолтное значение на пустой массив []
