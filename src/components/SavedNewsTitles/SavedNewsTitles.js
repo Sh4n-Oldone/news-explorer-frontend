@@ -4,7 +4,7 @@ import './SavedNewsTitles.css';
 export default function SavedNewsTitles({currentUserName}) {
 
   // Можно добавить в дефолтный массив данные для проверки
-  const [tags, setTags] = useState([])
+  const [tags, setTags] = useState(['Прирорда', 'Прирорда', 'Прирорда'])
 
   return (
 
