@@ -10,7 +10,7 @@
   margin: 80px 56px 80px 104px;
 }
 
-.about__text-wrapper {
+.about__wrapper {
   margin: 131px 0 279px;
 }
 
@@ -51,7 +51,7 @@
     border-radius: 50%;
     margin: 61px 32px 61px 40px;
   }
-  .about__text-wrapper {
+  .about__wrapper {
     margin: 40px 0 72px;
   }
   .about__title {
@@ -62,5 +62,36 @@
   }
   .about__text_wrapper {
     max-width: 424px;
+  }
+}
+
+@media screen and (max-width: 630px) {
+  .about {
+    flex-direction: column;
+    align-items: center;
+  }
+  .about__photo {
+    height: 272px;
+    width: 272px;
+    border-radius: 50%;
+    margin: 32px auto 24px;
+  }
+  .about__wrapper {
+    margin: 0 16px 80px;
+  }
+  .about__title {
+    max-width: 500px;
+  }
+  .about__text_wrapper {
+    max-width: 500px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .about__title {
+    max-width: 288px;
+  }
+  .about__text_wrapper {
+    max-width: 288px;
   }
 }

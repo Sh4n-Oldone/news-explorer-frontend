@@ -50,6 +50,7 @@ export default function Footer() {
           />
         </a>
       </div>
+      <p className='footer__copyright footer__copyright_small'>&#169; 2020 Pavlov's NewsExplorer, Powered by News API</p>
     </footer>
 
   );

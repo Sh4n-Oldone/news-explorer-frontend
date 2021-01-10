@@ -15,7 +15,7 @@ export default function About() {
         alt='Фото автора'
         className='about__photo'
       />
-      <div className='about__text-wrapper'>
+      <div className='about__wrapper'>
         <h2 className='about__title'>Об авторе</h2>
         <div className='about__text_wrapper'>
           <p className='about__text'>
