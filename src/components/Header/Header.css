@@ -5,8 +5,9 @@
   max-width: 1440px;
   height: 80px;
   border-bottom: 1px solid rgba(196, 196, 196, 30%);
-  position: fixed;
-  z-index: 2;
+  /* position: fixed; */
+  position: absolute;
+  z-index: 3;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -24,10 +25,12 @@
   text-align: left;
   display: flex;
   align-items: center;
+  z-index: 3;
 }
 
 .header__title_dark-mode {
   color: black;
+  z-index: 3;
 }
 
 @media screen and (max-width: 810px) {

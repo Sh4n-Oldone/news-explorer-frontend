@@ -12,7 +12,7 @@ export default function LogOutButton({name, isNeedToBeDark}) {
     <div className='logout-button_wrapper'>
       <p className='logout-button__item'>{name}</p>
       <img 
-        src={isNeedToBeDark || location.pathname==='/saved-news' 
+        src={location.pathname==='/saved-news' 
           ? ImageLogOutDark
           : ImageLogOut
         } 

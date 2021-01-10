@@ -109,6 +109,10 @@
   opacity: 0.5;
 }
 
+@media screen and (max-width: 810px) {
+  
+}
+
 @media screen and (max-width: 470px) {
   .popup {
     top: calc(50% - 230px);

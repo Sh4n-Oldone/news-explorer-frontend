@@ -4,7 +4,7 @@ import './SavedNewsTitles.css';
 export default function SavedNewsTitles({currentUserName}) {
 
   // Можно добавить в дефолтный массив данные для проверки
-  const [tags, setTags] = useState(['Прирорда', 'Прирорда', 'Прирорда'])
+  const [tags, setTags] = useState(['Природа', 'Котики', 'Тэги'])
 
   return (
 
@@ -18,11 +18,10 @@ export default function SavedNewsTitles({currentUserName}) {
       <p className='saved-news-titles__subtitle'>
         {tags.length >= 2 
         ? <>
-            По ключевым словам: <p className='saved-news-titles__subtitle saved-news-titles__subtitle_strong-mode'>
-              {tags.slice(0, 2).join(', ')}
-            </p> и <p className='saved-news-titles__subtitle saved-news-titles__subtitle_strong-mode'>
-              {tags.length - 2}-м другим
-            </p>
+            По ключевым словам:
+            <strong className='saved-news-titles__subtitle saved-news-titles__subtitle_strong-mode'> {tags.slice(0, 2).join(', ')} </strong>
+            и
+            <strong className='saved-news-titles__subtitle saved-news-titles__subtitle_strong-mode'> {tags.length - 2}-м другим</strong>
           </>
         : 'Вам нужно сохранить больше статей'
         
