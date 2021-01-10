@@ -18,7 +18,10 @@ export default function NewsCard(card) {
 
       {/* Этот блок появляется в зависимости от наличия объекта tag в приходящем пропсе card */}
       <div className={`news-card__tag${card.tag ? '' : ' news-card__tag_hidden'}`}>
-        <p className='news-card__tag_text'>{card.tag}</p>
+        <p className='news-card__tag_text'>
+          {/* {card.tag} */}
+          tag
+        </p>
       </div>
 
       {/* Этот блок появляется только если переданный из App в пропсы isLoggedIn равен true */}

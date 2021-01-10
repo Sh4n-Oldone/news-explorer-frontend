@@ -40,3 +40,15 @@
   text-align: center;
   color: #B6BCBF;
 }
+
+@media screen and (max-width: 810px) {
+  .news-not-found__icon {
+    max-width: 86px;
+    max-height: 86px;
+    margin-top: 50px;
+    margin-bottom: 18px;
+  }
+  .news-not-found__subtitle {
+    margin-bottom: 50px;
+  }
+}
