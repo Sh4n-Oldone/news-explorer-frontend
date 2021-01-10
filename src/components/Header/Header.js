@@ -7,8 +7,8 @@ import './Header.css';
 export default function Header({isLoggedIn, currentUserName, handleLogInButton}) {
 
   const location = useLocation();
-  const intViewportWidth = window.innerWidth;
   const [makeHeaderWhite, setMakeHeaderWhite] = useState(true)
+  const [screenWidth, setScreenWidth] = useState('')
 
   function changeHeaderToDark() {
     setMakeHeaderWhite(false)
@@ -17,12 +17,38 @@ export default function Header({isLoggedIn, currentUserName, handleLogInButton})
     setMakeHeaderWhite(true)
   }
 
+  // создание таймера до выполнения принятой функции
+  // чтобы было меньше рендеров на странице
+  function debounce(fn, ms) {
+    let timer
+    return _ => {
+      clearTimeout(timer)
+      timer = setTimeout(_ => {
+        timer = null
+        fn.apply(this, arguments)
+      }, ms)
+    };
+  }
+
+  useEffect(() => {
+    const debouncedHandleResize = debounce(function resize() {
+      setScreenWidth(window.innerWidth)
+    }, 50)
+    // 50 количество милисекунд, после которого 
+    // прочитается значение window.innerWidth и запишется в стейт
+    
+    window.addEventListener('resize', debouncedHandleResize)
+    return _ => {
+      window.removeEventListener('resize', debouncedHandleResize)
+    }
+  })
+
   return (
     <>
       <header className='header'>
         <h1 className={`header__title${makeHeaderWhite && location.pathname==='/saved-news' ? ' header__title_dark-mode' : ''}`}>NewsExplorer</h1>
 
-        { intViewportWidth<631
+        { screenWidth<631
           ? <BurgerHeaderNav 
               isLoggedIn={isLoggedIn}
               currentUserName={currentUserName}
