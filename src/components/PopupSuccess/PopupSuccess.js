@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../../utils/button-style__reset.css';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import './PopupSuccess.css';
@@ -10,6 +10,21 @@ export default function PopupSuccess(props) {
     props.handleLogIn();
   }
 
+  const handleClose = (e) => {
+    if (e.target.classList.contains("popup__wrapper")) {
+      props.onClose();
+    }
+  }
+  const handleEsc = (e) => {
+    if(e.keyCode === 27) {
+      props.onClose();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleEsc)
+  }, [])
+
   return (
 
     <section 
@@ -18,7 +33,7 @@ export default function PopupSuccess(props) {
         ? ' popup-success_opened'
         : ''
       }`}
-      // onClick={props.onClose}
+      onClick={handleClose}
     >
 
       <div className='popup-success'>
