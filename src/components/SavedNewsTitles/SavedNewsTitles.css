@@ -13,6 +13,7 @@
   line-height: 24px;
   color: rgba(26, 27, 34, 0.5);
   margin: 120px auto 28px 0;
+  padding: 0;
   display: flex;
 }
 
@@ -56,9 +57,31 @@
     max-width: 336px;
     font-size: 30px;
     line-height: 34px;
+    margin-top: 0;
     margin-bottom: 16px;
   }
   .saved-news-titles__subtitle {
     font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .saved-news-titles {
+    max-height: 302px;
+    margin-left: 16px;
+    margin-bottom: 32px;
+  }
+  .saved-news-titles__title {
+    font-size: 12px;
+    margin-top: 64px;
+    margin-bottom: 16px;
+  }
+  .saved-news-titles__hello {
+    max-width: 100%;
+    margin-bottom: 16px;
+    margin-right: 16px;
+  }
+  .saved-news-titles__subtitle {
+    font-size: 18px;
   }
 }
