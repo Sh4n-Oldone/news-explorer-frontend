@@ -1,4 +1,4 @@
-.popup__wrapper {
+.popup-success__wrapper {
   position: fixed;
   top: 0;
   left: 0;
@@ -10,7 +10,7 @@
   visibility: hidden;
 }
 
-.popup {
+.popup-success {
   position: fixed;
   top: calc(50% - 220px);
   left: calc(50% - 230px);
@@ -24,18 +24,18 @@
   border-radius: 16px;
 }
 
-.popup_opened {
+.popup-success_opened {
   visibility: visible;
 }
 
-.popup__container {
+.popup-success__container {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 34px 36px 28px;
 }
 
-.popup__title {
+.popup-success__title {
   font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: 900;
@@ -46,11 +46,11 @@
   margin: 0 auto 22px 0;
 }
 
-.popup__bottom-link {
+.popup-success__bottom-link {
   
 }
 
-.popup__bottom-link_mod {
+.popup-success__bottom-link_mod {
   font-family: 'Inter', sans-serif;
   font-style: normal;
   font-weight: 400;
@@ -60,12 +60,12 @@
   margin: 0 auto 0 0;
 }
 
-.popup__bottom-link_item {
+.popup-success__bottom-link_item {
   text-decoration: none;
   color: #2F71E5;
 }
 
-.popup__close-button {
+.popup-success__close-button {
   position: absolute;
   right: -32px;
   top: -37px;
@@ -74,26 +74,26 @@
   background: url('../../images/close-icon.png') no-repeat center;
 }
 
-.popup__close-button:active {
+.popup-success__close-button:active {
   opacity: 0.5;
 }
 
 @media screen and (max-width: 470px) {
-  .popup {
+  .popup-success {
     top: calc(50% - 230px);
     left: calc(50% - 170px);
     max-width: 320px;
     max-height: 458px;
   }
 
-  .popup__close-button {
+  .popup-success__close-button {
     right: 16px;
     top: -46px;
   }
 }
 
 @media screen and (max-width: 320px) {
-  .popup {
+  .popup-success {
     top: 56px;
     left: 0;
     max-width: 320px;

@@ -109,10 +109,6 @@
   opacity: 0.5;
 }
 
-@media screen and (max-width: 810px) {
-  
-}
-
 @media screen and (max-width: 470px) {
   .popup {
     top: calc(50% - 230px);
@@ -120,14 +116,20 @@
     max-width: 320px;
     max-height: 458px;
   }
-
   .popup__close-button {
     right: 16px;
     top: -46px;
   }
+  .popup__container {
+    margin: 16px 16px 28px;
+  }
+  .popup__save-button {
+    width: 100%;
+    margin: 0 0 16px;
+  }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 350px) {
   .popup {
     top: 56px;
     left: 0;

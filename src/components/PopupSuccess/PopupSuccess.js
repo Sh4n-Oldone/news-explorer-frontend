@@ -13,27 +13,27 @@ export default function PopupSuccess(props) {
   return (
 
     <section 
-      className={`popup__wrapper${
+      className={`popup-success__wrapper${
         props.isOpen 
-        ? ' popup_opened'
+        ? ' popup-success_opened'
         : ''
       }`}
       // onClick={props.onClose}
     >
 
-      <div className='popup'>
-        <div className='popup__container'>
+      <div className='popup-success'>
+        <div className='popup-success__container'>
 
-          <h2 className='popup__title'>Пользователь успешно зарегистрирован!</h2>
-          <p className='popup__bottom-link_mod'>
+          <h2 className='popup-success__title'>Пользователь успешно зарегистрирован!</h2>
+          <p className='popup-success__bottom-link_mod'>
             <button 
-                  className='button-style__reset popup__bottom-link_item'
+                  className='button-style__reset popup-success__bottom-link_item'
                   onClick={() => {handlePopups()}}
                 >Войти</button>
           </p>
 
-          <button type='button'
-            className='button-style__reset popup__close-button'
+          <button type='button-success'
+            className='button-style__reset popup-success__close-button'
             onClick={props.onClose}
           />
 
