@@ -7,8 +7,6 @@
   align-items: center;
 }
 
-/* Блок формы */
-
 .main__content {
   max-width: 608px;
   display: flex;
@@ -107,5 +105,58 @@
   .main__form {
     height: 56px;
     margin-bottom: 48px;
+  }
+}
+
+@media screen and (max-width: 490px) {
+  .main {
+    max-height: 536px;
+  }
+  .main__content {
+    max-width: 320px;
+  }
+  .main__title {
+    max-width: 320px;
+    margin: 86px auto 16px;
+  }
+  .main__subtitle {
+    margin-bottom: 80px;
+    font-size: 18px;
+  }
+  .main__form {
+    max-width: 320px;
+    margin-bottom: 32px;
+    height: 128px;
+    flex-direction: column;
+    border-radius: 0;
+    overflow: hidden;
+    background-color: transparent;
+  }
+  .main__form_input {
+    border-radius: 100px;
+    padding-left: 20px;
+    width: auto;
+    margin-left: 0;
+    margin-bottom: 16px;
+    max-height: 56px;
+  }
+  .main__form_submit-button {
+    max-height: 56px;
+    height: 100%;
+  }
+}
+
+@media screen and (max-width: 356px) {
+  .main__content {
+    max-width: 288px;
+  }
+  .main__title {
+    max-width: 288px;
+  }
+  .main__subtitle {
+    margin-bottom: 122px;
+  }
+  .main__form {
+    max-width: 288px;
   }
 }
