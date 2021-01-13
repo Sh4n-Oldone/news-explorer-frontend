@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import './PopupLogIn.css';
+import useForm from '../../utils/useForm'
 
 export default function PopupLogin({isOpen, onClose, handleSignUpButton}) {
+  const { values, handleChange, errors, isValid, resetForm } = useForm();
   
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleEmailInput = (event) => {setEmail(event.target.value)}
-  const handlePasswordInput = (event) => {setPassword(event.target.value)}
+  useEffect(() => {
+    resetForm();
+  }, [isOpen, resetForm]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -21,43 +21,45 @@ export default function PopupLogin({isOpen, onClose, handleSignUpButton}) {
       popupName={'login'}
       onSubmit={handleSubmit}
       title={'Вход'}
-      isSubmitEnable={true}
+      isSubmitEnable={isValid}
       buttonName={'Войти'}
       altLinkName={'Зарегистрироваться'}
       onClose={onClose}
       isOpen={isOpen}
-      handleSignUpButton={handleSignUpButton}
+      handleSignUpButton={handleSignUpButton} 
     >
 
       <p className='popup-log-in__input_name'>Email</p>
       <input
-        value={email || ''}
+        value={values.email || ''}
         type='email'
         name='email'
         placeholder='Введите почту'
         className='popup-log-in__input'
-        onChange={handleEmailInput}
+        onChange={handleChange}
         required
       />
       <small
         className='popup-log-in__input_type_error'
-      />
+      >{errors.email}</small>
 
       <p className='popup-log-in__input_name'>Пароль</p>
       <input
-        value={password || ''}
+        value={values.password || ''}
         type='password'
         name='password'
         placeholder='Введите пароль'
         className='popup-log-in__input'
-        onChange={handlePasswordInput}
+        onChange={handleChange}
         required
       />
       <small
         className='popup-log-in__input_type_error'
-      />
+      >{errors.password}</small>
 
-      <p className='popup-log-in__form_error'/>
+      <p className='popup-log-in__form_error'>{
+        // Сюда должна падать ошибка api
+      }</p>
       
     </PopupWithForm>
 
