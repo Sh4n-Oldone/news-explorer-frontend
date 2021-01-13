@@ -1,0 +1,43 @@
+.header {
+  /* background-color: rgba(0, 0, 0, 20%); */
+  color: white;
+  width: 100%;
+  max-width: 1440px;
+  height: 80px;
+  border-bottom: 1px solid rgba(196, 196, 196, 30%);
+  /* position: fixed; */
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+.header__title {
+  margin: 0 0 0 104px;
+  font-family: 'Roboto Slab';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  z-index: 3;
+}
+
+.header__title_dark-mode {
+  color: black;
+  z-index: 3;
+}
+
+@media screen and (max-width: 810px) {
+  .header {
+    height: 66px;
+  }
+  .header__title {
+    margin-left: 40px;
+  }
+}

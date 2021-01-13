@@ -1,0 +1,139 @@
+.popup__wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+  visibility: hidden;
+}
+
+.popup {
+  position: fixed;
+  top: calc(50% - 220px);
+  left: calc(50% - 230px);
+  z-index: 4;
+  max-width: 430px;
+  max-height: 458px;
+  width: 100%;
+  /* height: 100%; */
+  background-color: #fff;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+}
+
+.popup_opened {
+  visibility: visible;
+}
+
+.popup__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 34px 36px 28px;
+}
+
+.popup__title {
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 28px;
+  color: #1A1B22;
+  padding: 0;
+  margin: 0 auto 22px 0;
+}
+
+.popup__form {
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  width: 100%;
+  overflow: hidden;
+}
+
+.popup__save-button {
+  width: 100%;
+  margin: 0 0 16px;
+  padding: 0;
+  height: 64px;
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  /* box-shadow: 0px 5px 15px rgba(14, 26, 57, 0.2); */
+  background-color: #E6E8EB;
+  color: #B6BCBF;
+}
+
+.popup__save-button:hover {
+  opacity: 0.7;
+}
+
+.popup__save-button_enabled {
+  background-color: #2F71E5;
+  color: #fff;
+}
+
+.popup__bottom-link {
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+  margin: 0;
+}
+
+.popup__bottom-link_item {
+  text-decoration: none;
+  color: #2F71E5;
+}
+
+.popup__close-button {
+  position: absolute;
+  right: -32px;
+  top: -37px;
+  width: 40px;
+  height: 40px;
+  background: url('../../images/close-icon.png') no-repeat center;
+}
+
+.popup__close-button:active {
+  opacity: 0.5;
+}
+
+@media screen and (max-width: 470px) {
+  .popup {
+    top: calc(50% - 230px);
+    left: calc(50% - 170px);
+    max-width: 320px;
+    max-height: 458px;
+  }
+  .popup__close-button {
+    right: 16px;
+    top: -46px;
+  }
+  .popup__container {
+    margin: 16px 16px 28px;
+  }
+  .popup__save-button {
+    width: 100%;
+    margin: 0 0 16px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .popup {
+    top: 56px;
+    left: 0;
+    max-width: 320px;
+  }
+}

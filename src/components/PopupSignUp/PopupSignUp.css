@@ -1,0 +1,53 @@
+.popup-sign-up__input_name {
+  margin: 14px auto 9px 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #2F71E5;
+}
+
+.popup-sign-up__input_name:first-of-type {
+  margin-top: 0;
+}
+
+.popup-sign-up__input {
+  border: 0;
+  border-bottom: 1px solid #bbbbbb;
+  outline: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
+  padding: 0 0 10px;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+}
+
+.popup-sign-up__input_type_error {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #FF0000;
+  /* visibility: hidden; */
+}
+
+.popup-sign-up__form_error {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: center;
+  color: #FF0000;
+  margin: 0 0 8px 0;
+  padding: 0;
+}
