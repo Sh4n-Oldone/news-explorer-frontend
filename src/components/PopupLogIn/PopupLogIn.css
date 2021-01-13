@@ -37,7 +37,7 @@
   font-size: 12px;
   line-height: 15px;
   color: #FF0000;
-  visibility: hidden;
+  /* visibility: hidden; */
 }
 
 .popup-log-in__form_error {

@@ -8,7 +8,7 @@ export default function Header({isLoggedIn, currentUserName, handleLogInButton})
 
   const location = useLocation();
   const [makeHeaderWhite, setMakeHeaderWhite] = useState(true)
-  const [screenWidth, setScreenWidth] = useState('')
+  const [screenWidth, setScreenWidth] = useState(1400)
 
   function changeHeaderToDark() {
     setMakeHeaderWhite(false)
@@ -36,12 +36,12 @@ export default function Header({isLoggedIn, currentUserName, handleLogInButton})
     }, 50)
     // 50 количество милисекунд, после которого 
     // прочитается значение window.innerWidth и запишется в стейт
-    
+
     window.addEventListener('resize', debouncedHandleResize)
     return _ => {
       window.removeEventListener('resize', debouncedHandleResize)
     }
-  })
+  }, [screenWidth])
 
   return (
     <>
