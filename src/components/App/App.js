@@ -16,6 +16,8 @@ import CurrentUserContext from '../../context/CurrentUserContext';
 import CardsContext from '../../context/CardsContext';
 import SavedCardsContext from '../../context/SavedCardsContext';
 import testImg from '../../images/test-card-image.png';
+import * as MainApi from '../../utils/MainApi.js';
+import { getToken } from '../../utils/token';
 
 
 export default function App() {
@@ -26,7 +28,7 @@ export default function App() {
 
   // Для тестирования перевести нужные дефолтные значения стейтов в true
   const [loaderVisibility, setLoaderVisibility] = useState(false);
-  const [newsVisibility, setNewsVisibility] = useState(true);
+  const [newsVisibility, setNewsVisibility] = useState(false);
   const [newsNotFoundVisibility, setNewsNotFoundVisibility] = useState(false);
 
   // При дальнейшей разработке заменить дефолтное значение на пустой массив []
@@ -37,7 +39,7 @@ export default function App() {
       title: 'Национальное достояние – парки',
       subtitle: 'В 2016 году Америка отмечала важный юбилей: сто лет назад здесь начала складываться система национальных парков – охраняемых территорий, где и сегодня каждый может приобщиться к природе.',
       source: 'Лента.ру',
-      _id: '1', 
+      _id: 'a2', 
       isSaved: false,
     },
     {
@@ -46,7 +48,7 @@ export default function App() {
       title: 'Лесные огоньки: история одной фотографии',
       subtitle: 'Фотограф отвлеклась от освещения суровой политической реальности Мексики, чтобы запечатлеть ускользающую красоту одного из местных чудес природы.',
       source: 'Медуза',
-      _id: '2', 
+      _id: 'a3', 
       isSaved: false,
     },
     {
@@ -55,7 +57,7 @@ export default function App() {
       title: '«Первозданная тайга»: новый фотопроект Игоря Шпиленка',
       subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
       source: 'Медуза',
-      _id: '3', 
+      _id: 'a4', 
       isSaved: true,
     },
     {
@@ -64,7 +66,7 @@ export default function App() {
       title: '«Первозданная тайга»: новый фотопроект Игоря Шпиленка asdasdasdasd',
       subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
       source: 'Риа',
-      _id: '4', 
+      _id: 'a5', 
       isSaved: true,
     },
     {
@@ -73,12 +75,66 @@ export default function App() {
       title: 'Первозданная тайга',
       subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
       source: 'Риа',
-      _id: '5', 
+      _id: 'a6', 
+      isSaved: false,
+    },
+    {
+      image: testImg,
+      date: '30 августа, 2019',
+      title: 'Первозданная тайга',
+      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
+      source: 'Риа',
+      _id: 'a7', 
+      isSaved: false,
+    },
+    {
+      image: testImg,
+      date: '30 августа, 2019',
+      title: 'Первозданная тайга',
+      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
+      source: 'Риа',
+      _id: 'a8', 
+      isSaved: false,
+    },
+    {
+      image: testImg,
+      date: '30 августа, 2019',
+      title: 'Первозданная тайга',
+      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
+      source: 'Риа',
+      _id: 'a9', 
+      isSaved: false,
+    },
+    {
+      image: testImg,
+      date: '30 августа, 2019',
+      title: 'Первозданная тайга',
+      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
+      source: 'Риа',
+      _id: 'a10', 
+      isSaved: false,
+    },
+    {
+      image: testImg,
+      date: '30 августа, 2019',
+      title: 'Первозданная тайга',
+      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
+      source: 'Риа',
+      _id: 'a11', 
+      isSaved: false,
+    },
+    {
+      image: testImg,
+      date: '30 августа, 2019',
+      title: 'Первозданная тайга',
+      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
+      source: 'Риа',
+      _id: 'a12', 
       isSaved: false,
     }
   ]);
 
-  const [searchTag, setSearchTag] = useState(''); // Добавление этого стейта к загружаемой карточке
+  const [searchTag, setSearchTag] = useState(''); // Этот стейт идёт в отправку на сервер
 
   // дефолтные стейты попапов
   const [isPopupLogInOpen, setIsPopupLogInOpen] = useState(false);
@@ -179,6 +235,7 @@ export default function App() {
                     <Main
                       showLoader={showLoader}
                       // loadingNewsApi={getDataFromNewsApi} // заменить этим showLoader
+                      handleSearchTag={handleSearchTag}
                     />
 
                     <Preloader
@@ -190,6 +247,7 @@ export default function App() {
                       isLoggedIn={isLoggedIn} 
                       onCardClick={handleCardClick} 
                       onLikeClick={handleSaveCardClick} 
+                      
                     />
 
                     <NewsNotFound 

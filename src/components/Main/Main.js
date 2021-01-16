@@ -6,7 +6,7 @@ import './Main.css';
 export default function Main({showLoader, handleSearchTag}) {
 
   const [inputState, setInputState] = useState({ search: '' })
-
+  const [placeholder, setPlaceholder] = useState('Введите тему новости');
 
   const handleChange = (e) => {
     const { name,  value } = e.target;
@@ -19,6 +19,9 @@ export default function Main({showLoader, handleSearchTag}) {
   const handleSubmit = (event) => {
     event.preventDefault();
     handleSearchTag(inputState.search);
+    if (inputState.search === '') {
+      setPlaceholder('Сначала введите тему');
+    }
     showLoader();
     // здесь будет отправка данных наружу в app
   }
@@ -36,7 +39,7 @@ export default function Main({showLoader, handleSearchTag}) {
             className='input-style__reset main__form_input' 
             name='search' 
             value={inputState.search || ''} 
-            placeholder='Введите тему новости' 
+            placeholder={placeholder} 
             type='text' 
             onChange={handleChange} 
             required

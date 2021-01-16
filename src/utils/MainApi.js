@@ -1,0 +1,147 @@
+import { setToken } from './token';
+
+export const BASE_URL = 'https://api.alpavlov.students.nomoreparties.space';
+
+export const register = ( email, password, name ) => {
+  return fetch(`${BASE_URL}/signup`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password,
+      name: name
+    })
+  })
+  .then(res => {
+    if (res.status === 409 || res.status === 400 || res.status === 401) {
+      const error = {error: 'Ошибка'}
+      return error;
+    }
+    if (res.status !== 200 || res.status !== 201) {
+      return res.json();
+    }
+  })
+};
+
+export const authorize = ( email, password ) => {
+  return fetch(`${BASE_URL}/signin`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password
+    })
+  })
+  .then(res => {
+    if (res.status === 400) {
+      const error = 'Не передано одно из полей для проверки пользователя';
+      return error;
+    }
+    if (res.status === 401) {
+      const error = 'Неверный логин или пароль';
+      return error;
+    }
+    if (res.status !== 200 || res.status !== 201) {
+      return res.json();
+    }
+  })
+  .then((data) => {
+    if (data.token){
+      setToken(data.token);
+      return data;
+    } else {
+      return;
+    }
+  })
+};
+
+export const getUserData = (token) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(res => {
+    if (res.status === 401) {
+      const error = 'Некорректная отправка токена';
+      return error;
+    }
+    if (res.status === 404) {
+      const error = 'Пользователь не обнаружен';
+      return error;
+    }
+    return res.json();
+  })
+  .then((data) => {
+    return data;
+  })
+};
+
+export const getArticles = (token) => {
+  return fetch(`${BASE_URL}/articles`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(res => {
+    if (res.status !== 200) {
+      return Promise.reject(`Ошибка: ${res.status}`);
+    }
+    return res.json();
+  })
+  .then((data) => {
+    return data;
+  })
+};
+
+export const createArticles = ( token, keyword, title, text, date, source, link, image ) => {
+  return fetch(`${BASE_URL}/articles`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: {
+      keyword: keyword,
+      title: title,
+      text: text,
+      date: date,
+      source: source,
+      link: link,
+      image: image
+    }
+  })
+  .then(res => {
+    if (res.status === 200) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  })
+  .then((data) => {
+    return data;
+  })
+};
+
+export const removeArticles = (token, _id) => {
+  return fetch(`${BASE_URL}/articles/${_id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(res => {
+    if (res.status === 200) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  })
+};

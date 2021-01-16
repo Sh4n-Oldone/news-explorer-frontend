@@ -12,12 +12,15 @@ export default function NewsCardList({
   onCardClick, 
   onLikeClick}) {
 
-  const [showMoreCards, setShowMoreCards] = useState(false);
+  // const [showMoreCards, setShowMoreCards] = useState(false);
+  const [cardsCounter, setCardsCounter] = useState(3);
+  const [isButtonVisible, setIsButtonVisible] = useState(true)
 
   const location = useLocation();
 
   function clickMe() {
-    setShowMoreCards(true);
+    // setShowMoreCards(true);
+    setCardsCounter(cardsCounter + 3);
   }
 
   return (
@@ -31,7 +34,8 @@ export default function NewsCardList({
               {cards =>
                 <section className='news-cards'>
                   <ul className='news-cards__list'>
-                    {cards.slice(0, showMoreCards || location.pathname==='/saved-news' ? cards.length : 3).map(card =>
+                    {cardsCounter >= cards.length ? setIsButtonVisible(false) : setIsButtonVisible(true)}
+                    {cards.slice(0, location.pathname==='/saved-news' ? cards.length : cardsCounter).map(card =>
                       <NewsCard {...card}
                             key={card._id} //Не факт, что будет id в api
                             onCardClick={onCardClick} 
@@ -44,7 +48,11 @@ export default function NewsCardList({
               }
             </CardsContext.Consumer>
             <button 
-              className='button-style__reset news__button-more-news' 
+              className={`button-style__reset news__button-more-news${
+                isButtonVisible
+                ? ''
+                : ' news__button-more-news_hidden'
+              }`} 
               onClick={clickMe}
             >Показать ещё</button>
           </>
