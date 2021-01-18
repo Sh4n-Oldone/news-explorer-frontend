@@ -65,6 +65,12 @@
   outline: none;
 }
 
+.main__form_input:-webkit-autofill,
+.main__form_input:-webkit-autofill:focus,
+.main__form_input:-webkit-autofill:hover {
+  -webkit-box-shadow: 0 0 0 64px white inset;
+}
+
 .main__form_submit-button {
   background-color: #2F71E5;
   color: white;
