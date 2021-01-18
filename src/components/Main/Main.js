@@ -3,7 +3,7 @@ import '../../utils/button-style__reset.css';
 import '../../utils/input-style__reset.css';
 import './Main.css';
 
-export default function Main({showLoader, handleSearchTag}) {
+export default function Main({setSearchTag, loadingNewsApi}) {
 
   const [inputState, setInputState] = useState({ search: '' })
   const [placeholder, setPlaceholder] = useState('Введите тему новости');
@@ -18,14 +18,13 @@ export default function Main({showLoader, handleSearchTag}) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    handleSearchTag(inputState.search);
-    if (inputState.search === '') {
-      setPlaceholder('Сначала введите тему');
+    const search = inputState.search;
+    if (search !== '') {
+      setSearchTag(search);
+      loadingNewsApi(search);
     }
-    showLoader();
-    // здесь будет отправка данных наружу в app
+    setPlaceholder('Сначала введите тему');
   }
-
 
   return (
 

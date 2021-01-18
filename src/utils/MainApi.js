@@ -102,7 +102,7 @@ export const getArticles = (token) => {
   })
 };
 
-export const createArticles = ( token, keyword, title, text, date, source, link, image ) => {
+export const createArticles = ( token, keyword, {title, description, publishedAt, source, url, urlToImage} ) => {
   return fetch(`${BASE_URL}/articles`, {
     method: 'POST',
     headers: {
@@ -112,11 +112,11 @@ export const createArticles = ( token, keyword, title, text, date, source, link,
     body: {
       keyword: keyword,
       title: title,
-      text: text,
-      date: date,
-      source: source,
-      link: link,
-      image: image
+      text: description,
+      date: publishedAt,
+      source: source.name,
+      link: url,
+      image: urlToImage
     }
   })
   .then(res => {

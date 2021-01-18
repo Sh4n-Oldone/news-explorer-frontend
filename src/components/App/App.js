@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Header from '../Header/Header.js';
 import Main from '../Main/Main.js';
@@ -15,8 +15,8 @@ import { Switch, Route } from 'react-router-dom';
 import CurrentUserContext from '../../context/CurrentUserContext';
 import CardsContext from '../../context/CardsContext';
 import SavedCardsContext from '../../context/SavedCardsContext';
-import testImg from '../../images/test-card-image.png';
-import * as MainApi from '../../utils/MainApi.js';
+import * as mainApi from '../../utils/MainApi.js';
+import * as newsApi from '../../utils/NewsApi.js';
 import { getToken } from '../../utils/token';
 
 
@@ -24,7 +24,7 @@ export default function App() {
 
   // Временные состояния для тестирования хэдера
   const [currentUserName, setCurrentUserName] = useState('Грета');
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Для тестирования перевести нужные дефолтные значения стейтов в true
   const [loaderVisibility, setLoaderVisibility] = useState(false);
@@ -32,114 +32,18 @@ export default function App() {
   const [newsNotFoundVisibility, setNewsNotFoundVisibility] = useState(false);
 
   // При дальнейшей разработке заменить дефолтное значение на пустой массив []
-  const [newsCards, setNewsCards] = useState([
-    {
-      image: testImg,
-      date: '2 августа, 2019',
-      title: 'Национальное достояние – парки',
-      subtitle: 'В 2016 году Америка отмечала важный юбилей: сто лет назад здесь начала складываться система национальных парков – охраняемых территорий, где и сегодня каждый может приобщиться к природе.',
-      source: 'Лента.ру',
-      _id: 'a2', 
-      isSaved: false,
-    },
-    {
-      image: testImg,
-      date: '3 августа, 2019',
-      title: 'Лесные огоньки: история одной фотографии',
-      subtitle: 'Фотограф отвлеклась от освещения суровой политической реальности Мексики, чтобы запечатлеть ускользающую красоту одного из местных чудес природы.',
-      source: 'Медуза',
-      _id: 'a3', 
-      isSaved: false,
-    },
-    {
-      image: testImg,
-      date: '4 августа, 2019',
-      title: '«Первозданная тайга»: новый фотопроект Игоря Шпиленка',
-      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
-      source: 'Медуза',
-      _id: 'a4', 
-      isSaved: true,
-    },
-    {
-      image: testImg,
-      date: '17 августа, 2020',
-      title: '«Первозданная тайга»: новый фотопроект Игоря Шпиленка asdasdasdasd',
-      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
-      source: 'Риа',
-      _id: 'a5', 
-      isSaved: true,
-    },
-    {
-      image: testImg,
-      date: '30 августа, 2019',
-      title: 'Первозданная тайга',
-      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
-      source: 'Риа',
-      _id: 'a6', 
-      isSaved: false,
-    },
-    {
-      image: testImg,
-      date: '30 августа, 2019',
-      title: 'Первозданная тайга',
-      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
-      source: 'Риа',
-      _id: 'a7', 
-      isSaved: false,
-    },
-    {
-      image: testImg,
-      date: '30 августа, 2019',
-      title: 'Первозданная тайга',
-      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
-      source: 'Риа',
-      _id: 'a8', 
-      isSaved: false,
-    },
-    {
-      image: testImg,
-      date: '30 августа, 2019',
-      title: 'Первозданная тайга',
-      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
-      source: 'Риа',
-      _id: 'a9', 
-      isSaved: false,
-    },
-    {
-      image: testImg,
-      date: '30 августа, 2019',
-      title: 'Первозданная тайга',
-      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
-      source: 'Риа',
-      _id: 'a10', 
-      isSaved: false,
-    },
-    {
-      image: testImg,
-      date: '30 августа, 2019',
-      title: 'Первозданная тайга',
-      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
-      source: 'Риа',
-      _id: 'a11', 
-      isSaved: false,
-    },
-    {
-      image: testImg,
-      date: '30 августа, 2019',
-      title: 'Первозданная тайга',
-      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
-      source: 'Риа',
-      _id: 'a12', 
-      isSaved: false,
-    }
-  ]);
+  const [newsCards, setNewsCards] = useState([]);
+  const [savedCards, setSavedCards] = useState([]);
 
   const [searchTag, setSearchTag] = useState(''); // Этот стейт идёт в отправку на сервер
+  const [tagsArr, setTagsArr] = useState([]); // Этот стейт изменяется при загрузке сохранённых статей
 
   // дефолтные стейты попапов
   const [isPopupLogInOpen, setIsPopupLogInOpen] = useState(false);
   const [isPopupSignUpOpen, setIsPopupSignUpOpen] = useState(false);
   const [isPopupSuccessfullRegister, setIsPopupSuccessfullRegister] = useState(false);
+
+  const [cardsCounter, setCardsCounter] = useState(3);
 
   function handlePopupLogInOpen() {
     setIsPopupLogInOpen(true);
@@ -158,10 +62,6 @@ export default function App() {
     setIsPopupLogInOpen(false);
     setIsPopupSignUpOpen(false);
     setIsPopupSuccessfullRegister(false);
-  }
-
-  function handleSearchTag(tag) {
-    setSearchTag(tag);
   }
 
   // Наброски рабочих функций
@@ -190,17 +90,27 @@ export default function App() {
     setNewsNotFoundVisibility(false);
   }
 
-  function getDataFromNewsApi() {
+  async function getDataFromNewsApi(keyword) {
     try {
-      // showLoader();
-      // await newsApi().then((data) => {
-      //   //записать данные в стейты
-      //   //записать карточки в стейт карточек
-      //   hideLoader();
-      // })
+      showLoader();      
+      hideNewsCardList();
+
+      await newsApi.getNews(keyword).then((data) => {
+        setCardsCounter(3);
+        //записать данные в стейты
+        setNewsCards(data.articles);
+        //записать карточки в стейт карточек
+        // data.map((card) => tagsArr.find(card.keyword) ? tagsArr : setTagsArr(...tagsArr, card.keyword))
+        hideLoader();
+        if (data.articles.length === 0) {
+          showNewsNotFound();
+        } else {
+          showNewsCardList();
+        }
+      })
       
     } catch (error) {
-      
+      console.log(error);
     }
   }
 
@@ -219,8 +129,7 @@ export default function App() {
 
           <CurrentUserContext.Provider value={currentUserName}>
             <CardsContext.Provider value={newsCards}>
-              <SavedCardsContext.Provider value={newsCards}>
-                {/* В дальнейшем для сохранённых карточек надо будет сделать свой стейт, в который будут выгружаться данные из базы */}
+              <SavedCardsContext.Provider value={savedCards}>
 
                 <Header
                   isLoggedIn={isLoggedIn} 
@@ -233,9 +142,8 @@ export default function App() {
                   <Route exact path='/'>
 
                     <Main
-                      showLoader={showLoader}
-                      // loadingNewsApi={getDataFromNewsApi} // заменить этим showLoader
-                      handleSearchTag={handleSearchTag}
+                      loadingNewsApi={getDataFromNewsApi}
+                      setSearchTag={setSearchTag}
                     />
 
                     <Preloader
@@ -247,7 +155,10 @@ export default function App() {
                       isLoggedIn={isLoggedIn} 
                       onCardClick={handleCardClick} 
                       onLikeClick={handleSaveCardClick} 
-                      
+                      tag={searchTag}
+                      cardsArray={newsCards}
+                      cardsCounter={cardsCounter}
+                      setCardsCounter={setCardsCounter}
                     />
 
                     <NewsNotFound 
@@ -262,6 +173,7 @@ export default function App() {
 
                     <SavedNewsTitles 
                       currentUserName={currentUserName} 
+                      tagsArr={tagsArr}
                     />
 
                     <NewsCardList

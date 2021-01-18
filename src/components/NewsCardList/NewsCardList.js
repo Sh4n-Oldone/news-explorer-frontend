@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../utils/button-style__reset.css';
 import './NewsCardList.css';
 import CardsContext from '../../context/CardsContext';
@@ -10,18 +10,30 @@ export default function NewsCardList({
   isNewsCardListVisible, 
   isLoggedIn, 
   onCardClick, 
-  onLikeClick}) {
+  onLikeClick,
+  tag,
+  cardsArray,
+  cardsCounter,
+  setCardsCounter}) {
 
   // const [showMoreCards, setShowMoreCards] = useState(false);
-  const [cardsCounter, setCardsCounter] = useState(3);
+
   const [isButtonVisible, setIsButtonVisible] = useState(true)
 
   const location = useLocation();
 
   function clickMe() {
-    // setShowMoreCards(true);
     setCardsCounter(cardsCounter + 3);
   }
+
+  useEffect(() => {
+    if (cardsCounter >= cardsArray.length) {
+      setIsButtonVisible(false);
+    }
+    if (cardsCounter < cardsArray.length) {
+      setIsButtonVisible(true);
+    }
+  }, [cardsCounter, cardsArray.length]);
 
   return (
 
@@ -34,10 +46,10 @@ export default function NewsCardList({
               {cards =>
                 <section className='news-cards'>
                   <ul className='news-cards__list'>
-                    {cardsCounter >= cards.length ? setIsButtonVisible(false) : setIsButtonVisible(true)}
                     {cards.slice(0, location.pathname==='/saved-news' ? cards.length : cardsCounter).map(card =>
                       <NewsCard {...card}
-                            key={card._id} //Не факт, что будет id в api
+                            // key={cards.findIndex(element => element === card)}
+                            key={cards.url}
                             onCardClick={onCardClick} 
                             onSaveClick={onLikeClick} 
                             isLoggedIn={isLoggedIn} 
@@ -63,10 +75,11 @@ export default function NewsCardList({
                   <ul className='news-cards__list'>
                     {cards.map(card =>
                       <NewsCard {...card}
-                            key={card._id} //Не факт, что будет id в api
+                            key={card.link}
                             onCardClick={onCardClick} 
                             onSaveClick={onLikeClick} 
                             isLoggedIn={isLoggedIn} 
+                            tag={tag}
                       />
                     )}
                   </ul>

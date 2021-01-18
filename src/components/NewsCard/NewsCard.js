@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../../utils/button-style__reset.css';
 import './NewsCard.css';
+import notImg from '../../images/test-card-image.jpg';
 
 export default function NewsCard(card) {
 
@@ -12,6 +13,15 @@ export default function NewsCard(card) {
     setIsLabelVisible(false);
   }
   // card.isLoggedIn
+
+  const timeOptions = {
+    year: 'numeric',
+	  month: 'long',
+	  day: 'numeric',
+	  timezone: 'UTC'
+  }
+
+
   return (
 
     <li className='news-card'>
@@ -37,17 +47,17 @@ export default function NewsCard(card) {
       />
 
       <img 
-        src={card.image} 
+        src={card.urlToImage ? card.urlToImage : notImg} 
         alt={card.title} 
         className='news-card__image'
       />
       <div className='news-card__text'>
         <div className='news-card-text__wrapper'>
-          <p className='news-card__date'>{card.date}</p>
+          <p className='news-card__date'>{new Date(card.publishedAt).toLocaleString('ru', timeOptions).replace(' г.', '')}</p>
           <h3 className='news-card__title'>{card.title}</h3>
-          <p className='news-card__subtitle'>{card.subtitle}</p>
+          <p className='news-card__subtitle'>{card.description}</p>
         </div>
-        <h4 className='news-card__source'>{card.source}</h4>
+        <h4 className='news-card__source'>{card.source.name}</h4>
       </div>
       
     </li>
