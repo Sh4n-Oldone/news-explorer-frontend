@@ -3,24 +3,28 @@ import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import './PopupSignUp.css';
 import useForm from '../../utils/useForm';
 
-export default function PopupSignUp({isOpen, onClose, handleLogIn}) {
+export default function PopupSignUp({isOpen, onClose, handleLogIn, registration, isRegisterError}) {
 
   const { values, handleChange, errors, isValid, resetForm } = useForm();
-  
-  useEffect(() => {
-    resetForm();
-  }, [isOpen, resetForm]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    // if (isValid) {
+      console.log('qweqweqwe');
+      console.log(values);
+      registration(values);
+    // }
   }
+
+  useEffect(() => {
+    resetForm();
+  }, [isOpen, resetForm]);
 
   return (
 
     <PopupWithForm
       popupName={'signup'}
-      onSubmit={handleSubmit}
+      handleSubmit={handleSubmit}
       title={'Вход'}
       isSubmitEnable={isValid}
       buttonName={'Зарегистрироваться'}
@@ -76,7 +80,9 @@ export default function PopupSignUp({isOpen, onClose, handleLogIn}) {
       >{errors.name}</small>
 
       <p className='popup-sign-up__form_error'>{
-        // Сюда должна падать ошибка api
+        isRegisterError
+        ? 'Ошибка создания пользователя'
+        : ''
       }</p>
       
     </PopupWithForm>

@@ -3,17 +3,17 @@ import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import './PopupLogIn.css';
 import useForm from '../../utils/useForm'
 
-export default function PopupLogin({isOpen, onClose, handleSignUpButton}) {
+export default function PopupLogin({isOpen, onClose, handleSignUpButton, isLogInError, logIn}) {
   const { values, handleChange, errors, isValid, resetForm } = useForm();
-  
-  useEffect(() => {
-    resetForm();
-  }, [isOpen, resetForm]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    logIn(values);
   }
+
+  useEffect(() => {
+    resetForm();
+  }, [isOpen, resetForm]);
 
   return (
 
@@ -58,7 +58,9 @@ export default function PopupLogin({isOpen, onClose, handleSignUpButton}) {
       >{errors.password}</small>
 
       <p className='popup-log-in__form_error'>{
-        // Сюда должна падать ошибка api
+        isLogInError
+        ? 'Ошибка входа'
+        : ''
       }</p>
       
     </PopupWithForm>

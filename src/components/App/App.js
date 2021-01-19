@@ -17,7 +17,8 @@ import CardsContext from '../../context/CardsContext';
 import SavedCardsContext from '../../context/SavedCardsContext';
 import * as mainApi from '../../utils/MainApi.js';
 import * as newsApi from '../../utils/NewsApi.js';
-import { getToken } from '../../utils/token';
+import { getToken, removeToken } from '../../utils/token';
+import ProtectedRoute from '../../utils/ProtectedRoute';
 
 
 export default function App() {
@@ -45,12 +46,19 @@ export default function App() {
 
   const [cardsCounter, setCardsCounter] = useState(3);
 
+  const [isRegisterError, setIsRegisterError] = useState(false);
+  const [isLogInError, setIsLogInError] = useState(false);
+
   function handlePopupLogInOpen() {
     setIsPopupLogInOpen(true);
   }
 
-  function handlePopupSignInOpen() {
+  function handlePopupSignUnOpen() {
     setIsPopupSignUpOpen(true);
+  }
+
+  function handlePopupSignUnClose() {
+    setIsPopupSignUpOpen(false);
   }
 
   function handlePopupSuccessOpen() {
@@ -90,17 +98,41 @@ export default function App() {
     setNewsNotFoundVisibility(false);
   }
 
+  function showRegistrationError() {
+    setIsRegisterError(true);
+  }
+
+  function tokenCheck() {
+    const jwt = getToken();
+
+    if (!jwt) {
+      return;
+    };
+
+    if (jwt) {
+      mainApi.getArticles(jwt)
+        .then((data) => {
+          setSavedCards(data);
+          data.map((card) => tagsArr.find(card.keyword) ? tagsArr : setTagsArr(...tagsArr, card.keyword))
+        })
+
+      return mainApi.getUserData(jwt)
+              .then((res) => {
+                setIsLoggedIn(true);
+                setCurrentUserName(res.name);
+              });
+    }
+  }
+
   async function getDataFromNewsApi(keyword) {
     try {
-      showLoader();      
       hideNewsCardList();
-
+      hideNewsNotFound();
+      showLoader();
+      
       await newsApi.getNews(keyword).then((data) => {
         setCardsCounter(3);
-        //записать данные в стейты
         setNewsCards(data.articles);
-        //записать карточки в стейт карточек
-        // data.map((card) => tagsArr.find(card.keyword) ? tagsArr : setTagsArr(...tagsArr, card.keyword))
         hideLoader();
         if (data.articles.length === 0) {
           showNewsNotFound();
@@ -110,17 +142,51 @@ export default function App() {
       })
       
     } catch (error) {
-      console.log(error);
+      console.log('getDataFromNewsApi error: ' + error);
     }
   }
 
-  function handleCardClick() {
-    // При клике на новость должна открываться вкладка по ссылке на эту новость, наверное
+  function registration({email, password, name}) {
+    mainApi.register(email, password, name)
+      .then((data) => {
+        if(data.error || !data) {
+          showRegistrationError();
+        }
+        if (data && !data.error) {
+          handlePopupSignUnClose();
+          handlePopupSuccessOpen();
+        }
+      })
+      .catch(err => console.log('registration: ' + err))
+  }
+
+  function logIn({email, password}) {
+    mainApi.authorize(email, password)
+      .then((data) => {
+        if (!data) {
+          setIsLogInError(true);
+        } else {
+          setIsLoggedIn(true);
+          setIsLogInError(false);
+          tokenCheck();
+          closeAllPopups();
+        }
+      })
+      .catch(error => {console.log('logIn: ' + error)})
+  }
+
+  function logOut() {
+    setIsLoggedIn(!isLoggedIn);
+    removeToken();
   }
 
   function handleSaveCardClick() {
-    // Карточка добавляется в сохранённые
+    
   }
+
+  useEffect(() => {
+    tokenCheck();
+  }, []);
 
   return (
     <div className='App'>
@@ -135,6 +201,7 @@ export default function App() {
                   isLoggedIn={isLoggedIn} 
                   currentUserName={currentUserName} 
                   handleLogInButton={handlePopupLogInOpen}
+                  onExit={logOut}
                 />
                 
                 <Switch>
@@ -153,7 +220,6 @@ export default function App() {
                     <NewsCardList
                       isNewsCardListVisible={newsVisibility} 
                       isLoggedIn={isLoggedIn} 
-                      onCardClick={handleCardClick} 
                       onLikeClick={handleSaveCardClick} 
                       tag={searchTag}
                       cardsArray={newsCards}
@@ -169,7 +235,7 @@ export default function App() {
 
                   </Route>
 
-                  <Route path='/saved-news'>
+                  {/* <Route path='/saved-news'>
 
                     <SavedNewsTitles 
                       currentUserName={currentUserName} 
@@ -179,11 +245,25 @@ export default function App() {
                     <NewsCardList
                       isNewsCardListVisible={newsVisibility} 
                       isLoggedIn={isLoggedIn} 
-                      onCardClick={handleCardClick} 
                       onLikeClick={handleSaveCardClick} 
                     />
 
-                  </Route>
+                  </Route> */}
+
+                  <ProtectedRoute path='/saved-news' 
+                    loggedIn={isLoggedIn}
+                    componentFirst={SavedNewsTitles}
+                    componentSecond={NewsCardList}
+                    currentUserName={currentUserName} 
+                    tagsArr={tagsArr}
+                    isNewsCardListVisible={newsVisibility} 
+                    isLoggedIn={isLoggedIn} 
+                    onLikeClick={handleSaveCardClick} 
+                    tag={searchTag}
+                    cardsArray={newsCards}
+                    cardsCounter={cardsCounter}
+                    setCardsCounter={setCardsCounter}
+                  />
 
                 </Switch>
                 
@@ -192,14 +272,17 @@ export default function App() {
                 <PopupLogIn 
                   isOpen={isPopupLogInOpen} 
                   onClose={closeAllPopups} 
-                  handleSignUpButton={handlePopupSignInOpen}
+                  handleSignUpButton={handlePopupSignUnOpen}
+                  isLogInError={isLogInError}
+                  logIn={logIn}
                 />
 
                 <PopupSignUp
                   isOpen={isPopupSignUpOpen}
                   onClose={closeAllPopups}
                   handleLogIn={handlePopupLogInOpen}
-                  handleSuccess={handlePopupSuccessOpen}
+                  registration={registration}
+                  isRegisterError={isRegisterError}
                 />
 
                 <PopupSuccess 

@@ -8,8 +8,8 @@ export default function Navigation(
   {
     isLoggedIn, 
     currentUserName, 
-    isNeedToBeDark, 
-    handleLogInButton
+    handleLogInButton,
+    onExit
   }) {
 
   const location = useLocation();
@@ -55,7 +55,7 @@ export default function Navigation(
               ? ' nav__link_auth_dark-mode'
               : ''
             }`}
-            onClick={handleLogInButton} 
+            onClick={isLoggedIn ? onExit : handleLogInButton} 
           >
             {isLoggedIn 
               ? <LogOutButton name={currentUserName} /> 

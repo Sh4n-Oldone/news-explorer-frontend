@@ -45,7 +45,7 @@ export const authorize = ( email, password ) => {
       const error = 'Неверный логин или пароль';
       return error;
     }
-    if (res.status !== 200 || res.status !== 201) {
+    if (res.status === 200 || res.status === 201) {
       return res.json();
     }
   })

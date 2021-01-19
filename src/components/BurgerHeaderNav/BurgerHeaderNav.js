@@ -10,7 +10,8 @@ export default function BurgerHeaderNav(
     currentUserName, 
     handleLogInButton, 
     changeHeaderToDark, 
-    changeHeaderToWhite 
+    changeHeaderToWhite,
+    onExit
   }) {
   
   const location = useLocation();
@@ -68,7 +69,7 @@ export default function BurgerHeaderNav(
         </ul>
         <button 
           className='button-style__reset burger__auth_button'
-          onClick={handleLogInButton}
+          onClick={isLoggedIn ? onExit : handleLogInButton}
         >
           {isLoggedIn 
             ? <LogOutButton name={currentUserName}/> 
