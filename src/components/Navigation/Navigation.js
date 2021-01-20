@@ -3,13 +3,13 @@ import '../../utils/button-style__reset.css';
 import { useHistory, useLocation } from 'react-router-dom';
 import './Navigation.css';
 import LogOutButton from '../LogOutButton/LogOutButton.js';
+import CurrentUserContext from '../../context/CurrentUserContext';
 
 export default function Navigation(
   {
     isLoggedIn, 
-    currentUserName, 
-    handleLogInButton,
-    onExit
+    handleLogInButton, 
+    onExit 
   }) {
 
   const location = useLocation();
@@ -31,8 +31,8 @@ export default function Navigation(
           <button 
           type='button'
             className={`button-style__reset nav__link nav__link_no-decor${location.pathname==='/saved-news' 
-              ? ' nav__link_not-active' 
-              : ''}`} 
+              ? ' nav__link_not-active nav__link_not-active_to-main' 
+              : ' nav__link_active'}`} 
             onClick={(event) => {
               event.preventDefault();
               handleClickMainPage();
@@ -62,19 +62,23 @@ export default function Navigation(
         </li>
 
         <li>
-          <button 
-            className={`button-style__reset nav__link_no-decor nav__link_auth${
-              location.pathname==='/saved-news' 
-              ? ' nav__link_auth_dark-mode'
-              : ''
-            }`}
-            onClick={isLoggedIn ? onExit : handleLogInButton} 
-          >
-            {isLoggedIn 
-              ? <LogOutButton name={currentUserName} /> 
-              : 'Авторизоваться'
+          <CurrentUserContext.Consumer>
+            {value => 
+              <button 
+                className={`button-style__reset nav__link_no-decor nav__link_auth${
+                  location.pathname==='/saved-news' 
+                  ? ' nav__link_auth_dark-mode'
+                  : ''
+                }`}
+                onClick={isLoggedIn ? onExit : handleLogInButton} 
+              >
+                {isLoggedIn 
+                  ? <LogOutButton name={value} /> 
+                  : 'Авторизоваться'
+                }
+              </button>
             }
-          </button>
+          </CurrentUserContext.Consumer>
         </li>
 
       </ul>

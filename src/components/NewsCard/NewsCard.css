@@ -12,6 +12,10 @@
   overflow: hidden;
 }
 
+.news-card_hidden {
+  display: none;
+}
+
 .news-card__tag {
   position: absolute;
   left: 24px;
@@ -117,6 +121,10 @@
   justify-content: space-between;
   height: 100%;
   user-select: none;
+}
+
+.news-card__text_link-wrapper {
+  text-decoration: none;
 }
 
 .news-card__date {

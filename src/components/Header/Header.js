@@ -4,7 +4,7 @@ import Navigation from '../Navigation/Navigation';
 import BurgerHeaderNav from '../BurgerHeaderNav/BurgerHeaderNav';
 import './Header.css';
 
-export default function Header({isLoggedIn, currentUserName, handleLogInButton, onExit}) {
+export default function Header({isLoggedIn, handleLogInButton, onExit}) {
 
   const location = useLocation();
   const [makeHeaderWhite, setMakeHeaderWhite] = useState(true)
@@ -55,18 +55,16 @@ export default function Header({isLoggedIn, currentUserName, handleLogInButton, 
 
         { screenWidth<631 || window.innerWidth<631
           ? <BurgerHeaderNav 
-              isLoggedIn={isLoggedIn}
-              currentUserName={currentUserName}
-              handleLogInButton={handleLogInButton}
-              changeHeaderToDark={changeHeaderToDark}
-              changeHeaderToWhite={changeHeaderToWhite}
-              onExit={onExit}
+              isLoggedIn={isLoggedIn} 
+              handleLogInButton={handleLogInButton} 
+              changeHeaderToDark={changeHeaderToDark} 
+              changeHeaderToWhite={changeHeaderToWhite} 
+              onExit={onExit} 
             />
           : <Navigation
               isLoggedIn={isLoggedIn} 
-              currentUserName={currentUserName} 
-              handleLogInButton={handleLogInButton}
-              onExit={onExit}
+              handleLogInButton={handleLogInButton} 
+              onExit={onExit} 
             />
         }
 

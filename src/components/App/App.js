@@ -23,7 +23,7 @@ import ProtectedRoute from '../../utils/ProtectedRoute';
 
 export default function App() {
 
-  const [currentUserName, setCurrentUserName] = useState('Грета');
+  const [currentUserName, setCurrentUserName] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [loaderVisibility, setLoaderVisibility] = useState(false);
@@ -32,9 +32,9 @@ export default function App() {
 
   const [newsCards, setNewsCards] = useState([]);
   const [savedCards, setSavedCards] = useState([]);
+  const [tagsArr, setTagsArr] = useState([]);
 
   const [searchTag, setSearchTag] = useState('');
-  const [tagsArr, setTagsArr] = useState([]);
 
   const [isPopupLogInOpen, setIsPopupLogInOpen] = useState(false);
   const [isPopupSignUpOpen, setIsPopupSignUpOpen] = useState(false);
@@ -115,7 +115,6 @@ export default function App() {
     try {
       await mainApi.getArticles(token)
         .then((data) => {
-          console.log(data);
           const tags = [];
           setSavedCards(data);
           savedCards.map((card) => tags.includes(card.keyword) ? '' : tags.push(card.keyword));
@@ -124,8 +123,6 @@ export default function App() {
         .then((tags) => {
           setTagsArr(tags);
         })
-      console.log(tagsArr);
-      console.log(savedCards);
     } catch (error) {
       console.log(error);
     }
@@ -183,7 +180,9 @@ export default function App() {
 
     mainApi.removeArticles(jwt, card)
       .then((message) => {
-        // доделать
+        // const newArr = [];
+        // savedCards.map((item) => item===card ? '' : newArr.push(item));
+        // setSavedCards(newArr);
       })
       .catch(err => {console.log(err)})
 
@@ -192,12 +191,6 @@ export default function App() {
   useEffect(() => {
     tokenCheck();
   }, []);
-
-  useEffect(() => {
-    if(isLoggedIn === true){
-      tokenCheck()
-    }
-  }, [isLoggedIn]);
 
   return (
     <div className='App'>
@@ -210,7 +203,6 @@ export default function App() {
 
                 <Header
                   isLoggedIn={isLoggedIn} 
-                  currentUserName={currentUserName} 
                   handleLogInButton={handlePopupLogInOpen}
                   onExit={logOut}
                 />
@@ -250,7 +242,6 @@ export default function App() {
                     loggedIn={isLoggedIn}
                     componentFirst={SavedNewsTitles}
                     componentSecond={NewsCardList}
-                    currentUserName={currentUserName} 
                     tagsArr={tagsArr}
                     isNewsCardListVisible={newsVisibility} 
                     isLoggedIn={isLoggedIn} 
