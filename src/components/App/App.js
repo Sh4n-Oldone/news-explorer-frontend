@@ -179,11 +179,6 @@ export default function App() {
     const jwt = getToken();
 
     mainApi.removeArticles(jwt, card)
-      .then((message) => {
-        // const newArr = [];
-        // savedCards.map((item) => item===card ? '' : newArr.push(item));
-        // setSavedCards(newArr);
-      })
       .catch(err => {console.log(err)})
 
   }

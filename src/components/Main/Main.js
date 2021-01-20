@@ -48,7 +48,6 @@ export default function Main({setSearchTag, loadingNewsApi}) {
           ></input>
           <button type='submit'
                   className='button-style__reset main__form_submit-button'
-                  // onSubmit={handleSubmit}
           >Искать</button>
         </form>
       </section>
