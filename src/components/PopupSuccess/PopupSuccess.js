@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import '../../utils/button-style__reset.css';
-import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import './PopupSuccess.css';
 
 export default function PopupSuccess(props) {
@@ -9,7 +8,6 @@ export default function PopupSuccess(props) {
     props.onClose();
     props.handleLogIn();
   }
-
   const handleClose = (e) => {
     if (e.target.classList.contains("popup__wrapper")) {
       props.onClose();

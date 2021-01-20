@@ -46,7 +46,7 @@ export default function PopupWithForm(props) {
 
           <form className='popup__form'
                 name={props.popupName}
-                onSubmit={props.onSubmit}
+                onSubmit={props.handleSubmit}
           >
             {props.children}
             <button type='submit'

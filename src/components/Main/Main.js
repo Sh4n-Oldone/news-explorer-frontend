@@ -33,7 +33,10 @@ export default function Main({setSearchTag, loadingNewsApi}) {
       <section className='main__content'>
         <h2 className='main__title'>Что творится в мире?</h2>
         <p className='main__subtitle'>Находите самые свежие статьи на любую тему и сохраняйте в своём личном кабинете.</p>
-        <form className='main__form'>
+        <form 
+          className='main__form'
+          onSubmit={handleSubmit}
+        >
           <input 
             className='input-style__reset main__form_input' 
             name='search' 
@@ -45,7 +48,7 @@ export default function Main({setSearchTag, loadingNewsApi}) {
           ></input>
           <button type='submit'
                   className='button-style__reset main__form_submit-button'
-                  onClick={handleSubmit}
+                  // onSubmit={handleSubmit}
           >Искать</button>
         </form>
       </section>

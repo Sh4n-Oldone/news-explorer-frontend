@@ -2,17 +2,20 @@ import React, { useState } from 'react';
 import '../../utils/button-style__reset.css';
 import './NewsCard.css';
 import notImg from '../../images/test-card-image.jpg';
+import { useLocation } from 'react-router-dom';
 
 export default function NewsCard(card) {
 
   const [isLabelVisible, setIsLabelVisible] = useState(false);
+
+  const location = useLocation();
+
   function showLabel() {
     setIsLabelVisible(true);
   }
   function hideLabel() {
     setIsLabelVisible(false);
   }
-  // card.isLoggedIn
 
   const timeOptions = {
     year: 'numeric',
@@ -40,24 +43,40 @@ export default function NewsCard(card) {
 
       <button 
         className={ `button-style__reset news-card__save-button
-        ${card.isSaved && card.isLoggedIn ? ' news-card__save-button_saved' : ''}` } 
-        onClick={() => {card.onSaveClick(card)}}
+          ${
+            card.isSaved && card.isLoggedIn 
+              ? ' news-card__save-button_saved' 
+              : ''}
+          ${
+            location.pathname==='/saved-news' 
+              ? ' news-card__save-button_unsave' 
+              : ''
+          }` 
+        } 
+        onClick={() => {
+          location.pathname!=='/saved-news' 
+          ? card.onSaveClick(card) 
+          : card.onRemoveClick(card)
+        }}
         onMouseOver={() => {showLabel()}} 
         onMouseOut={() => {hideLabel()}} 
       />
 
       <img 
-        src={card.urlToImage ? card.urlToImage : notImg} 
+        src={card.urlToImage 
+          ? card.urlToImage
+          : card.image ? card.image : notImg
+        } 
         alt={card.title} 
         className='news-card__image'
       />
       <div className='news-card__text'>
         <div className='news-card-text__wrapper'>
-          <p className='news-card__date'>{new Date(card.publishedAt).toLocaleString('ru', timeOptions).replace(' г.', '')}</p>
+          <p className='news-card__date'>{new Date(card.publishedAt ? card.publishedAt : card.date).toLocaleString('ru', timeOptions).replace(' г.', '')}</p>
           <h3 className='news-card__title'>{card.title}</h3>
-          <p className='news-card__subtitle'>{card.description}</p>
+          <p className='news-card__subtitle'>{card.description ? card.description : card.text}</p>
         </div>
-        <h4 className='news-card__source'>{card.source.name}</h4>
+        <h4 className='news-card__source'>{card.source.name ? card.source.name : card.source}</h4>
       </div>
       
     </li>

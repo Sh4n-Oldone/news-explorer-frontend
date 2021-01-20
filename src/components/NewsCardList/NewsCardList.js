@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import '../../utils/button-style__reset.css';
 import './NewsCardList.css';
 import CardsContext from '../../context/CardsContext';
@@ -9,49 +9,36 @@ import SavedCardsContext from '../../context/SavedCardsContext';
 export default function NewsCardList({
   isNewsCardListVisible, 
   isLoggedIn, 
-  onCardClick, 
-  onLikeClick,
-  tag,
+  onCardClick,
   cardsArray,
   cardsCounter,
-  setCardsCounter}) {
+  setCardsCounter,
+  handleSaveCardClick,
+  handleRemoveCardClick}) {
 
-  // const [showMoreCards, setShowMoreCards] = useState(false);
-
-  const [isButtonVisible, setIsButtonVisible] = useState(true)
-
-  const location = useLocation();
+  let location = useLocation();
 
   function clickMe() {
     setCardsCounter(cardsCounter + 3);
   }
 
-  useEffect(() => {
-    if (cardsCounter >= cardsArray.length) {
-      setIsButtonVisible(false);
-    }
-    if (cardsCounter < cardsArray.length) {
-      setIsButtonVisible(true);
-    }
-  }, [cardsCounter, cardsArray.length]);
-
   return (
 
-    <section className={`news${ isNewsCardListVisible ? '' : ' news__hidden'}`}>
+    <section className={`news${ isNewsCardListVisible ? '' : ' news__hidden' }`}>
 
-      {location.pathname!=='/saved-news'
+      {/* {location.pathname!=='/saved-news'
         ? <>
             <h2 className='news__title'>Результаты поиска</h2>
             <CardsContext.Consumer>
               {cards =>
                 <section className='news-cards'>
                   <ul className='news-cards__list'>
-                    {cards.slice(0, location.pathname==='/saved-news' ? cards.length : cardsCounter).map(card =>
+                    {cards.slice(0, cardsCounter).map(card =>
                       <NewsCard {...card}
                             // key={cards.findIndex(element => element === card)}
-                            key={cards.url}
+                            key={card.url}
                             onCardClick={onCardClick} 
-                            onSaveClick={onLikeClick} 
+                            onSaveClick={handleSaveCardClick} 
                             isLoggedIn={isLoggedIn} 
                       />
                     )}
@@ -61,7 +48,7 @@ export default function NewsCardList({
             </CardsContext.Consumer>
             <button 
               className={`button-style__reset news__button-more-news${
-                isButtonVisible
+                cardsCounter < cardsArray.length
                 ? ''
                 : ' news__button-more-news_hidden'
               }`} 
@@ -75,11 +62,13 @@ export default function NewsCardList({
                   <ul className='news-cards__list'>
                     {cards.map(card =>
                       <NewsCard {...card}
-                            key={card.link}
+                            key={cards.findIndex(element => element === card)}
+                            // key={cards.link}
                             onCardClick={onCardClick} 
-                            onSaveClick={onLikeClick} 
+                            onSaveClick={handleSaveCardClick} 
+                            onRemoveClick={handleRemoveCardClick}
                             isLoggedIn={isLoggedIn} 
-                            tag={tag}
+                            tag={card.keyword}
                       />
                     )}
                   </ul>
@@ -87,7 +76,57 @@ export default function NewsCardList({
               }
             </SavedCardsContext.Consumer>
           </>
-      }
+      } */}
+
+        <div className={`news-block${location.pathname==='/saved-news' ? ' news-block_hidden' : ''}`}>
+          <h2 className='news__title'>Результаты поиска</h2>
+          <CardsContext.Consumer>
+            {cards =>
+              <section className='news-cards'>
+                <ul className='news-cards__list'>
+                  {cards.slice(0, cardsCounter).map(card =>
+                    <NewsCard {...card}
+                          // key={cards.findIndex(element => element === card)}
+                          key={card.url}
+                          onCardClick={onCardClick} 
+                          onSaveClick={handleSaveCardClick} 
+                          isLoggedIn={isLoggedIn} 
+                    />
+                  )}
+                </ul>
+              </section>
+            }
+          </CardsContext.Consumer>
+          <button 
+            className={`button-style__reset news__button-more-news${
+              cardsCounter < cardsArray.length
+              ? ''
+              : ' news__button-more-news_hidden'
+            }`} 
+            onClick={clickMe}
+          >Показать ещё</button>
+        </div>
+        <div className={`news-block${location.pathname==='/saved-news' ? '' : ' news-block_hidden'}`}>
+          <SavedCardsContext.Consumer>
+            {cards =>
+              <section className='news-cards'>
+                <ul className='news-cards__list'>
+                  {cards.map(card =>
+                    <NewsCard {...card}
+                          key={cards.findIndex(element => element === card)}
+                          // key={cards.link}
+                          onCardClick={onCardClick} 
+                          onSaveClick={handleSaveCardClick} 
+                          onRemoveClick={handleRemoveCardClick}
+                          isLoggedIn={isLoggedIn} 
+                          tag={card.keyword}
+                    />
+                  )}
+                </ul>
+              </section>
+            }
+          </SavedCardsContext.Consumer>
+        </div>
       
     </section>
   

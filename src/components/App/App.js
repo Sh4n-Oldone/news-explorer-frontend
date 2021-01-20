@@ -23,23 +23,19 @@ import ProtectedRoute from '../../utils/ProtectedRoute';
 
 export default function App() {
 
-  // Временные состояния для тестирования хэдера
   const [currentUserName, setCurrentUserName] = useState('Грета');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Для тестирования перевести нужные дефолтные значения стейтов в true
   const [loaderVisibility, setLoaderVisibility] = useState(false);
   const [newsVisibility, setNewsVisibility] = useState(false);
   const [newsNotFoundVisibility, setNewsNotFoundVisibility] = useState(false);
 
-  // При дальнейшей разработке заменить дефолтное значение на пустой массив []
   const [newsCards, setNewsCards] = useState([]);
   const [savedCards, setSavedCards] = useState([]);
 
-  const [searchTag, setSearchTag] = useState(''); // Этот стейт идёт в отправку на сервер
-  const [tagsArr, setTagsArr] = useState([]); // Этот стейт изменяется при загрузке сохранённых статей
+  const [searchTag, setSearchTag] = useState('');
+  const [tagsArr, setTagsArr] = useState([]);
 
-  // дефолтные стейты попапов
   const [isPopupLogInOpen, setIsPopupLogInOpen] = useState(false);
   const [isPopupSignUpOpen, setIsPopupSignUpOpen] = useState(false);
   const [isPopupSuccessfullRegister, setIsPopupSuccessfullRegister] = useState(false);
@@ -49,58 +45,24 @@ export default function App() {
   const [isRegisterError, setIsRegisterError] = useState(false);
   const [isLogInError, setIsLogInError] = useState(false);
 
-  function handlePopupLogInOpen() {
-    setIsPopupLogInOpen(true);
-  }
+  function handlePopupLogInOpen() { setIsPopupLogInOpen(true); }
+  function handlePopupSignUnOpen() { setIsPopupSignUpOpen(true); }
+  function handlePopupSignUnClose() { setIsPopupSignUpOpen(false); }
+  function handlePopupSuccessOpen() { setIsPopupSuccessfullRegister(true); }
 
-  function handlePopupSignUnOpen() {
-    setIsPopupSignUpOpen(true);
-  }
-
-  function handlePopupSignUnClose() {
-    setIsPopupSignUpOpen(false);
-  }
-
-  function handlePopupSuccessOpen() {
-    setIsPopupSuccessfullRegister(true);
-  }
-
-  // Функция закрытия попапов
   function closeAllPopups() {
     setIsPopupLogInOpen(false);
     setIsPopupSignUpOpen(false);
     setIsPopupSuccessfullRegister(false);
   }
 
-  // Наброски рабочих функций
-  function showLoader() {
-    // по нажатию на кнопку "Искать" включает отображение блока с аниманией загрузки
-    setLoaderVisibility(true);
-  }
-  function hideLoader() {
-    // по ДЕЙСТВИЕ выключает отображение блока с аниманией загрузки
-    setLoaderVisibility(false);
-  }
-  function showNewsCardList() {
-    // Отобразить блок карточек
-    setNewsVisibility(true);
-  }
-  function hideNewsCardList() {
-    // Скрыть блок карточек
-    setNewsVisibility(false);
-  }
-  function showNewsNotFound() {
-    // Отобразить блок с ошибкой Not Found
-    setNewsNotFoundVisibility(true);
-  }
-  function hideNewsNotFound() {
-    // Скрыть блок с ошибкой Not Found
-    setNewsNotFoundVisibility(false);
-  }
-
-  function showRegistrationError() {
-    setIsRegisterError(true);
-  }
+  function showLoader() { setLoaderVisibility(true); }
+  function hideLoader() { setLoaderVisibility(false); }
+  function showNewsCardList() { setNewsVisibility(true); }
+  function hideNewsCardList() { setNewsVisibility(false); }
+  function showNewsNotFound() { setNewsNotFoundVisibility(true); }
+  function hideNewsNotFound() { setNewsNotFoundVisibility(false); }
+  function showRegistrationError() { setIsRegisterError(true); }
 
   function tokenCheck() {
     const jwt = getToken();
@@ -110,18 +72,10 @@ export default function App() {
     };
 
     if (jwt) {
-      mainApi.getArticles(jwt)
-        .then((data) => {
-          setSavedCards(data);
-          data.map((card) => tagsArr.find(card.keyword) ? tagsArr : setTagsArr(...tagsArr, card.keyword))
-        })
-
-      return mainApi.getUserData(jwt)
-              .then((res) => {
-                setIsLoggedIn(true);
-                setCurrentUserName(res.name);
-              });
-    }
+      setIsLoggedIn(true);
+      setIsLogInError(false);
+      return getDataFromMainApi(jwt);
+    };
   }
 
   async function getDataFromNewsApi(keyword) {
@@ -139,11 +93,47 @@ export default function App() {
         } else {
           showNewsCardList();
         }
-      })
+      });
       
     } catch (error) {
-      console.log('getDataFromNewsApi error: ' + error);
+      console.log(error);
     }
+  }
+
+  async function getUserName(token) {
+    try {
+      await mainApi.getUserData(token)
+        .then((res) => {
+          setCurrentUserName(res.name);
+        })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function getArticles(token) {
+    try {
+      await mainApi.getArticles(token)
+        .then((data) => {
+          console.log(data);
+          const tags = [];
+          setSavedCards(data);
+          savedCards.map((card) => tags.includes(card.keyword) ? '' : tags.push(card.keyword));
+          return tags;
+        })
+        .then((tags) => {
+          setTagsArr(tags);
+        })
+      console.log(tagsArr);
+      console.log(savedCards);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function getDataFromMainApi(token) {
+    getUserName(token);
+    getArticles(token);
   }
 
   function registration({email, password, name}) {
@@ -157,7 +147,7 @@ export default function App() {
           handlePopupSuccessOpen();
         }
       })
-      .catch(err => console.log('registration: ' + err))
+      .catch(err => console.log(err));
   }
 
   function logIn({email, password}) {
@@ -166,13 +156,11 @@ export default function App() {
         if (!data) {
           setIsLogInError(true);
         } else {
-          setIsLoggedIn(true);
-          setIsLogInError(false);
           tokenCheck();
           closeAllPopups();
         }
       })
-      .catch(error => {console.log('logIn: ' + error)})
+      .catch(error => {console.log(error)});
   }
 
   function logOut() {
@@ -180,13 +168,36 @@ export default function App() {
     removeToken();
   }
 
-  function handleSaveCardClick() {
-    
+  function handleSaveCardClick(card) {
+    const jwt = getToken();
+    const keyword = searchTag;
+    mainApi.createArticles(jwt, keyword, card)
+      .then((newCard) => {
+        setSavedCards([...savedCards, newCard]);
+      })
+      .catch(err => {console.log(err)});
+  }
+
+  function handleRemoveCardClick(card) {
+    const jwt = getToken();
+
+    mainApi.removeArticles(jwt, card)
+      .then((message) => {
+        // доделать
+      })
+      .catch(err => {console.log(err)})
+
   }
 
   useEffect(() => {
     tokenCheck();
   }, []);
+
+  useEffect(() => {
+    if(isLoggedIn === true){
+      tokenCheck()
+    }
+  }, [isLoggedIn]);
 
   return (
     <div className='App'>
@@ -220,11 +231,11 @@ export default function App() {
                     <NewsCardList
                       isNewsCardListVisible={newsVisibility} 
                       isLoggedIn={isLoggedIn} 
-                      onLikeClick={handleSaveCardClick} 
-                      tag={searchTag}
                       cardsArray={newsCards}
                       cardsCounter={cardsCounter}
                       setCardsCounter={setCardsCounter}
+                      handleSaveCardClick={handleSaveCardClick}
+                      handleRemoveCardClick={handleRemoveCardClick}
                     />
 
                     <NewsNotFound 
@@ -235,21 +246,6 @@ export default function App() {
 
                   </Route>
 
-                  {/* <Route path='/saved-news'>
-
-                    <SavedNewsTitles 
-                      currentUserName={currentUserName} 
-                      tagsArr={tagsArr}
-                    />
-
-                    <NewsCardList
-                      isNewsCardListVisible={newsVisibility} 
-                      isLoggedIn={isLoggedIn} 
-                      onLikeClick={handleSaveCardClick} 
-                    />
-
-                  </Route> */}
-
                   <ProtectedRoute path='/saved-news' 
                     loggedIn={isLoggedIn}
                     componentFirst={SavedNewsTitles}
@@ -258,11 +254,11 @@ export default function App() {
                     tagsArr={tagsArr}
                     isNewsCardListVisible={newsVisibility} 
                     isLoggedIn={isLoggedIn} 
-                    onLikeClick={handleSaveCardClick} 
-                    tag={searchTag}
                     cardsArray={newsCards}
                     cardsCounter={cardsCounter}
                     setCardsCounter={setCardsCounter}
+                    handleSaveCardClick={handleSaveCardClick}
+                    handleRemoveCardClick={handleRemoveCardClick}
                   />
 
                 </Switch>

@@ -22,11 +22,7 @@ export default function SavedNewsTitles({currentUserName, tagsArr}) {
             <strong className='saved-news-titles__subtitle saved-news-titles__subtitle_strong-mode'> {tagsArr.length - 2}-м другим</strong>
           </>
         : 'Вам нужно сохранить больше статей'
-        
-        
         }
-
-        
       </p>
 
     </section>

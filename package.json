@@ -19,7 +19,7 @@
   },
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "npm run build && scp -r ./build/* praktikum@130.193.37.196:/home/praktikum/mesto-frontend",
+    "deploy": "npm run build && scp -r ./build/* praktikum@130.193.37.196:/home/praktikum/news-explorer-front",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

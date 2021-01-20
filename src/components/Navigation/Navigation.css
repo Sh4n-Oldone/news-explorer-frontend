@@ -81,7 +81,7 @@
 }
 
 .nav__link_not-active:hover {
-  color: #000;
+  color: #fff;
 }
 
 @media screen and (max-width: 810px) {

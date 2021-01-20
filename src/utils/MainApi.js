@@ -19,7 +19,7 @@ export const register = ( email, password, name ) => {
       const error = {error: 'Ошибка'}
       return error;
     }
-    if (res.status !== 200 || res.status !== 201) {
+    if (res.status === 200 || res.status === 201) {
       return res.json();
     }
   })
@@ -97,9 +97,6 @@ export const getArticles = (token) => {
     }
     return res.json();
   })
-  .then((data) => {
-    return data;
-  })
 };
 
 export const createArticles = ( token, keyword, {title, description, publishedAt, source, url, urlToImage} ) => {
@@ -109,7 +106,7 @@ export const createArticles = ( token, keyword, {title, description, publishedAt
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: {
+    body: JSON.stringify({
       keyword: keyword,
       title: title,
       text: description,
@@ -117,20 +114,17 @@ export const createArticles = ( token, keyword, {title, description, publishedAt
       source: source.name,
       link: url,
       image: urlToImage
-    }
+    })
   })
   .then(res => {
-    if (res.status === 200) {
-      return res.json();
+    if (res.status !== 200) {
+      return Promise.reject(`Ошибка: ${res.status}`);
     }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  })
-  .then((data) => {
-    return data;
+    return res.json();
   })
 };
 
-export const removeArticles = (token, _id) => {
+export const removeArticles = (token, {_id}) => {
   return fetch(`${BASE_URL}/articles/${_id}`, {
     method: 'DELETE',
     headers: {

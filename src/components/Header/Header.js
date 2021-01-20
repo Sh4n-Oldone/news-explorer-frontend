@@ -46,7 +46,12 @@ export default function Header({isLoggedIn, currentUserName, handleLogInButton, 
   return (
     <>
       <header className='header'>
-        <h1 className={`header__title${makeHeaderWhite && location.pathname==='/saved-news' ? ' header__title_dark-mode' : ''}`}>NewsExplorer</h1>
+        <h1 
+          className={`header__title${makeHeaderWhite && location.pathname==='/saved-news' 
+          ? ' header__title_dark-mode' 
+          : ''
+          }`}
+        >NewsExplorer</h1>
 
         { screenWidth<631 || window.innerWidth<631
           ? <BurgerHeaderNav 

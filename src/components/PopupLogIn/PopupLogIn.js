@@ -19,7 +19,7 @@ export default function PopupLogin({isOpen, onClose, handleSignUpButton, isLogIn
 
     <PopupWithForm
       popupName={'login'}
-      onSubmit={handleSubmit}
+      handleSubmit={handleSubmit}
       title={'Вход'}
       isSubmitEnable={isValid}
       buttonName={'Войти'}
