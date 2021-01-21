@@ -44,7 +44,7 @@ export default function Header({isLoggedIn, handleLogInButton, onExit}) {
   }, [screenWidth])
 
   return (
-    <>
+
       <header className='header'>
         <h1 
           className={`header__title${makeHeaderWhite && location.pathname==='/saved-news' 
@@ -69,6 +69,6 @@ export default function Header({isLoggedIn, handleLogInButton, onExit}) {
         }
 
       </header>
-    </>
+
   );
 }
