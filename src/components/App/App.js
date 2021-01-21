@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import configData from '../../utils/config.json';
 import Header from '../Header/Header.js';
 import Main from '../Main/Main.js';
 import Preloader from '../Preloader/Preloader';
@@ -92,7 +93,7 @@ export default function App() {
       showLoader();
       setIsInputDisabled(true);
       await newsApi.getNews(keyword).then((data) => {
-        setCardsCounter(3);
+        setCardsCounter(configData.CARDS_COUNTER);
         setNewsCards(data.articles);
         setUserCards(data.articles);
         hideLoader();

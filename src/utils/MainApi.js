@@ -1,6 +1,7 @@
 import { setToken } from './token';
+import configData from './config.json';
 
-export const BASE_URL = 'https://api.alpavlov.students.nomoreparties.space';
+export const BASE_URL = configData.BACKEND_URL;
 
 export const register = ( email, password, name ) => {
   return fetch(`${BASE_URL}/signup`, {

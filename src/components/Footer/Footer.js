@@ -4,7 +4,6 @@ import githubIcon from '../../images/github.png';
 import linkedinIcon from '../../images/LI-In-Bug.png';
 
 export default function Footer() {
-  //Не забыть поменять ссылку на главную на нелокальный адрес
 
   return (
 
@@ -15,7 +14,7 @@ export default function Footer() {
           <li className='footer__links_item'>
             <a
               className='footer__links_link' 
-              href='http://localhost:3000/' 
+              href='https://alpavlov.students.nomoreparties.space/' 
             >Главная</a>
           </li>
           <li className='footer__links_item'>

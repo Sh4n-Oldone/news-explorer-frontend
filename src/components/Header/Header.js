@@ -19,13 +19,13 @@ export default function Header({isLoggedIn, handleLogInButton, onExit}) {
 
   // создание таймера до выполнения принятой функции
   // чтобы было меньше рендеров на странице
-  function debounce(fn, ms) {
+  function debounce(func, ms) {
     let timer
     return _ => {
       clearTimeout(timer)
       timer = setTimeout(_ => {
         timer = null
-        fn.apply(this, arguments)
+        func.apply(this, arguments)
       }, ms)
     };
   }
@@ -34,9 +34,8 @@ export default function Header({isLoggedIn, handleLogInButton, onExit}) {
     const debouncedHandleResize = debounce(function resize() {
       setScreenWidth(window.innerWidth)
     }, 50)
-    // 50 количество милисекунд, после которого 
+    // 50 - количество милисекунд, после которого 
     // прочитается значение window.innerWidth и запишется в стейт
-
     window.addEventListener('resize', debouncedHandleResize)
     return _ => {
       window.removeEventListener('resize', debouncedHandleResize)
