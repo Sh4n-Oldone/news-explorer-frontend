@@ -73,6 +73,7 @@ export default function App() {
     if (jwt) {
       setIsLoggedIn(true);
       setIsLogInError(false);
+      closeAllPopups();
       return getDataFromMainApi(jwt);
     };
   }
@@ -171,10 +172,11 @@ export default function App() {
       .catch(err => {console.log(err)});
   }
 
-  function handleRemoveCardClick(card) {
+  function handleRemoveCardClick(card, setHideCard) {
     const jwt = getToken();
 
     mainApi.removeArticles(jwt, card)
+      .then((answer) => {setHideCard(true)})
       .catch(err => {console.log(err)})
 
   }

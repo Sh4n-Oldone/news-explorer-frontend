@@ -21,8 +21,7 @@ export default function NewsCard(card) {
 
   function handleClick() {
     if (location.pathname==='/saved-news') {
-      setHideCard(true);
-      card.onRemoveClick(card);
+      card.onRemoveClick(card, setHideCard);
     }
     if (location.pathname!=='/saved-news' && card.isLoggedIn) {
       card.onSaveClick(card, setIsCardSaved);
