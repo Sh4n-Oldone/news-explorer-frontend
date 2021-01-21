@@ -25,7 +25,7 @@ export default function PopupSignUp({isOpen, onClose, handleLogIn, registration,
     <PopupWithForm
       popupName={'signup'}
       handleSubmit={handleSubmit}
-      title={'Вход'}
+      title={'Регистрация'}
       isSubmitEnable={isValid}
       buttonName={'Зарегистрироваться'}
       altLinkName={'Войти'}
