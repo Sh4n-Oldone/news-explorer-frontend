@@ -106,7 +106,10 @@ export default function App() {
       });
       
     } catch (error) {
-      setNewsLoadingError(error);
+      if (error.status === 400) {setNewsLoadingError('Ошибка параметров запроса')}
+      if (error.status === 401) {setNewsLoadingError('Неавторизованный доступ к API')}
+      if (error.status === 429) {setNewsLoadingError('Слишком много запросов')}
+      if (error.status === 500) {setNewsLoadingError('Сервер поиска временно недоступен')}
     }
   }
 
