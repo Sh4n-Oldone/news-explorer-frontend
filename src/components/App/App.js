@@ -160,12 +160,13 @@ export default function App() {
     removeToken();
   }
 
-  function handleSaveCardClick(card) {
+  function handleSaveCardClick(card, setIsCardSaved) {
     const jwt = getToken();
     const keyword = searchTag;
     mainApi.createArticles(jwt, keyword, card)
       .then((newCard) => {
         setSavedCards([...savedCards, newCard]);
+        setIsCardSaved(true);
       })
       .catch(err => {console.log(err)});
   }
@@ -218,6 +219,7 @@ export default function App() {
                       setCardsCounter={setCardsCounter}
                       handleSaveCardClick={handleSaveCardClick}
                       handleRemoveCardClick={handleRemoveCardClick}
+                      handlePopupSignUnOpen={handlePopupSignUnOpen}
                     />
 
                     <NewsNotFound 

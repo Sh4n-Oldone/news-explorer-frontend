@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 export default function NewsCard(card) {
 
   const [isLabelVisible, setIsLabelVisible] = useState(false);
-  const [isSaved, setIsSaved] = useState(false)
+  const [isCardSaved, setIsCardSaved] = useState(false);
   const [hideCard, setHideCard] = useState(false)
 
   const location = useLocation();
@@ -20,9 +20,15 @@ export default function NewsCard(card) {
   }
 
   function handleClick() {
-    setIsSaved(true);
-    if(location.pathname==='/saved-news') {
+    if (location.pathname==='/saved-news') {
       setHideCard(true);
+      card.onRemoveClick(card);
+    }
+    if (location.pathname!=='/saved-news' && card.isLoggedIn) {
+      card.onSaveClick(card, setIsCardSaved);
+    }
+    if (location.pathname!=='/saved-news' && !card.isLoggedIn) {
+      card.handlePopupSignUnOpen();
     }
   }
 
@@ -51,7 +57,7 @@ export default function NewsCard(card) {
       <button 
         className={ `button-style__reset news-card__save-button
           ${
-            isSaved && card.isLoggedIn 
+            isCardSaved && card.isLoggedIn 
               ? ' news-card__save-button_saved' 
               : ''}
           ${
@@ -60,12 +66,7 @@ export default function NewsCard(card) {
               : ''
           }` 
         } 
-        onClick={() => {
-          handleClick()
-          location.pathname!=='/saved-news' 
-          ? card.onSaveClick(card) 
-          : card.onRemoveClick(card)
-        }}
+        onClick={handleClick}
         onMouseOver={() => {showLabel()}} 
         onMouseOut={() => {hideLabel()}} 
       />

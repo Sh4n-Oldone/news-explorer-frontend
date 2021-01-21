@@ -13,7 +13,9 @@ export default function NewsCardList({
   cardsCounter, 
   setCardsCounter, 
   handleSaveCardClick, 
-  handleRemoveCardClick}) {
+  handleRemoveCardClick,
+  isCardSaved,
+  handlePopupSignUnOpen}) {
 
   let location = useLocation();
 
@@ -36,6 +38,8 @@ export default function NewsCardList({
                           key={card.url}
                           onSaveClick={handleSaveCardClick} 
                           isLoggedIn={isLoggedIn} 
+                          isCardSaved={isCardSaved}
+                          handlePopupSignUnOpen={handlePopupSignUnOpen}
                     />
                   )}
                 </ul>
