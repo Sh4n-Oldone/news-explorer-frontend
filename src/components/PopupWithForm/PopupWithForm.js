@@ -55,8 +55,7 @@ export default function PopupWithForm(props) {
                       ? ' popup__save-button_enabled'
                       : ''
                     }`} 
-                    // disabled={props.isSubmitEnable}
-                    // onSubmit={props.onSubmit}
+                    disabled={props.isDisabled}
             >{props.buttonName}</button>
           </form>
 

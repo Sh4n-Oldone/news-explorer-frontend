@@ -85,17 +85,18 @@ export default function App() {
     };
   }
 
-  async function getDataFromNewsApi(keyword) {
+  async function getDataFromNewsApi(keyword, setIsInputDisabled) {
     try {
       hideNewsCardList();
       hideNewsError();
       showLoader();
-      
+      setIsInputDisabled(true);
       await newsApi.getNews(keyword).then((data) => {
         setCardsCounter(3);
         setNewsCards(data.articles);
         setUserCards(data.articles);
         hideLoader();
+        setIsInputDisabled(false);
         if (data.articles.length === 0) {
           setNewsLoadingError('Ничего не найдено');
           showNewsError();
@@ -145,9 +146,11 @@ export default function App() {
     showNewsCardList();
   }
 
-  function registration({email, password, name}) {
+  function registration({email, password, name}, setIsInputDisabled) {
+    setIsInputDisabled(true);
     mainApi.register(email, password, name)
       .then((data) => {
+        setIsInputDisabled(false);
         if(data.error || !data) {
           showRegistrationError();
         }
@@ -159,9 +162,11 @@ export default function App() {
       .catch(err => console.log(err));
   }
 
-  function logIn({email, password}) {
+  function logIn({email, password}, setIsInputDisabled) {
+    setIsInputDisabled(true);
     mainApi.authorize(email, password)
       .then((data) => {
+        setIsInputDisabled(false);
         if (!data) {
           setIsLogInError(true);
         } else {

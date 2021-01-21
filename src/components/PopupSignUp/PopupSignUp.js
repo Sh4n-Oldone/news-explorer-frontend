@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import './PopupSignUp.css';
 import useForm from '../../utils/useForm';
@@ -6,14 +6,11 @@ import useForm from '../../utils/useForm';
 export default function PopupSignUp({isOpen, onClose, handleLogIn, registration, isRegisterError}) {
 
   const { values, handleChange, errors, isValid, resetForm } = useForm();
+  const [isInputDisabled, setIsInputDisabled] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // if (isValid) {
-      console.log('qweqweqwe');
-      console.log(values);
-      registration(values);
-    // }
+    registration(values, setIsInputDisabled);
   }
 
   useEffect(() => {
@@ -32,6 +29,7 @@ export default function PopupSignUp({isOpen, onClose, handleLogIn, registration,
       onClose={onClose}
       isOpen={isOpen}
       handleLogIn={handleLogIn}
+      isDisabled={isInputDisabled}
     >
 
       <p className='popup-sign-up__input_name'>Email</p>
@@ -41,7 +39,8 @@ export default function PopupSignUp({isOpen, onClose, handleLogIn, registration,
         name='email'
         placeholder='Введите почту'
         className='popup-sign-up__input'
-        onChange={handleChange}
+        onChange={handleChange} 
+        disabled={ isInputDisabled ? 'disabled' : ''}
         required
       />
       <small
@@ -57,6 +56,7 @@ export default function PopupSignUp({isOpen, onClose, handleLogIn, registration,
         className='popup-sign-up__input'
         onChange={handleChange}
         minLength={8} 
+        disabled={ isInputDisabled ? 'disabled' : ''}
         required
       />
       <small
@@ -72,7 +72,8 @@ export default function PopupSignUp({isOpen, onClose, handleLogIn, registration,
         className='popup-sign-up__input'
         onChange={handleChange}
         minLength={2}
-        maxLength={30}
+        maxLength={30} 
+        disabled={ isInputDisabled ? 'disabled' : ''}
         required
       />
       <small

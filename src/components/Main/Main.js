@@ -7,6 +7,7 @@ export default function Main({setSearchTag, loadingNewsApi}) {
 
   const [inputState, setInputState] = useState({ search: '' })
   const [placeholder, setPlaceholder] = useState('Введите тему новости');
+  const [isInputDisabled, setIsInputDisabled] = useState(false);
 
   const handleChange = (e) => {
     const { name,  value } = e.target;
@@ -21,7 +22,7 @@ export default function Main({setSearchTag, loadingNewsApi}) {
     const search = inputState.search;
     if (search !== '') {
       setSearchTag(search);
-      loadingNewsApi(search);
+      loadingNewsApi(search, setIsInputDisabled);
     }
     setPlaceholder('Сначала введите тему');
   }
@@ -44,10 +45,12 @@ export default function Main({setSearchTag, loadingNewsApi}) {
             placeholder={placeholder} 
             type='text' 
             onChange={handleChange} 
+            disabled={ isInputDisabled ? 'disabled' : ''}
             required
           ></input>
           <button type='submit'
                   className='button-style__reset main__form_submit-button'
+                  disabled={isInputDisabled}
           >Искать</button>
         </form>
       </section>

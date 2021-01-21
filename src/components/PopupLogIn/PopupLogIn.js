@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import './PopupLogIn.css';
 import useForm from '../../utils/useForm'
 
 export default function PopupLogin({isOpen, onClose, handleSignUpButton, isLogInError, logIn}) {
   const { values, handleChange, errors, isValid, resetForm } = useForm();
+  const [isInputDisabled, setIsInputDisabled] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    logIn(values);
+    logIn(values, setIsInputDisabled);
   }
 
   useEffect(() => {
@@ -27,6 +28,7 @@ export default function PopupLogin({isOpen, onClose, handleSignUpButton, isLogIn
       onClose={onClose}
       isOpen={isOpen}
       handleSignUpButton={handleSignUpButton} 
+      isDisabled={isInputDisabled}
     >
 
       <p className='popup-log-in__input_name'>Email</p>
@@ -37,6 +39,7 @@ export default function PopupLogin({isOpen, onClose, handleSignUpButton, isLogIn
         placeholder='Введите почту'
         className='popup-log-in__input'
         onChange={handleChange}
+        disabled={ isInputDisabled ? 'disabled' : ''}
         required
       />
       <small
@@ -51,6 +54,7 @@ export default function PopupLogin({isOpen, onClose, handleSignUpButton, isLogIn
         placeholder='Введите пароль'
         className='popup-log-in__input'
         onChange={handleChange}
+        disabled={ isInputDisabled ? 'disabled' : ''}
         required
       />
       <small
