@@ -67,7 +67,6 @@ export default function Header({isLoggedIn, handleLogInButton, onExit}) {
               onExit={onExit} 
             />
         }
-
       </header>
 
   );

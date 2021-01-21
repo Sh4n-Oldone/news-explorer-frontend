@@ -2,6 +2,12 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 const ProtectedRoute = ({ componentFirst: ComponentFirst, componentSecond: ComponentSecond, ...props }) => {
+  
+  function redirectWithPopUp() {
+    props.handlePopupLogInOpen();
+    return <Redirect exact to='/' />
+  }
+
   return (
     <Route>
       {
@@ -10,7 +16,7 @@ const ProtectedRoute = ({ componentFirst: ComponentFirst, componentSecond: Compo
               <ComponentFirst {...props} />
               <ComponentSecond {...props} />
             </> 
-          : <Redirect to='./' />
+          : redirectWithPopUp()
       }
     </Route>
   )

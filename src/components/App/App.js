@@ -239,6 +239,7 @@ export default function App() {
                     setCardsCounter={setCardsCounter}
                     handleSaveCardClick={handleSaveCardClick}
                     handleRemoveCardClick={handleRemoveCardClick}
+                    handlePopupLogInOpen={handlePopupLogInOpen}
                   />
 
                 </Switch>
