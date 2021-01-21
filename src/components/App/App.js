@@ -5,7 +5,7 @@ import Main from '../Main/Main.js';
 import Preloader from '../Preloader/Preloader';
 import NewsCardList from '../NewsCardList/NewsCardList';
 import About from '../About/About';
-import NewsNotFound from '../NewsNotFound/NewsNotFound.js';
+import NewsError from '../NewsError/NewsError.js';
 import PopupLogIn from '../PopupLogIn/PopupLogIn.js';
 import PopupSignUp from '../PopupSignUp/PopupSignUp.js';
 import PopupSuccess from '../PopupSuccess/PopupSuccess.js';
@@ -30,7 +30,8 @@ export default function App() {
 
   const [loaderVisibility, setLoaderVisibility] = useState(false);
   const [newsVisibility, setNewsVisibility] = useState(false);
-  const [newsNotFoundVisibility, setNewsNotFoundVisibility] = useState(false);
+  const [NewsErrorVisibility, setNewsErrorVisibility] = useState(false);
+  const [newsLoadingError, setNewsLoadingError] = useState('');
 
   const [newsCards, setNewsCards] = useState([]);
   const [savedCards, setSavedCards] = useState([]);
@@ -61,8 +62,8 @@ export default function App() {
   function hideLoader() { setLoaderVisibility(false); }
   function showNewsCardList() { setNewsVisibility(true); }
   function hideNewsCardList() { setNewsVisibility(false); }
-  function showNewsNotFound() { setNewsNotFoundVisibility(true); }
-  function hideNewsNotFound() { setNewsNotFoundVisibility(false); }
+  function showNewsError() { setNewsErrorVisibility(true); }
+  function hideNewsError() { setNewsErrorVisibility(false); }
   function showRegistrationError() { setIsRegisterError(true); }
 
   function tokenCheck() {
@@ -87,7 +88,7 @@ export default function App() {
   async function getDataFromNewsApi(keyword) {
     try {
       hideNewsCardList();
-      hideNewsNotFound();
+      hideNewsError();
       showLoader();
       
       await newsApi.getNews(keyword).then((data) => {
@@ -96,14 +97,15 @@ export default function App() {
         setUserCards(data.articles);
         hideLoader();
         if (data.articles.length === 0) {
-          showNewsNotFound();
+          setNewsLoadingError('Ничего не найдено');
+          showNewsError();
         } else {
           showNewsCardList();
         }
       });
       
     } catch (error) {
-      console.log(error);
+      setNewsLoadingError(error);
     }
   }
 
@@ -170,7 +172,7 @@ export default function App() {
       .catch(error => {console.log(error)});
   }
 
-  function logOut() { // ПРОВЕРИТЬ РАБОТОСПОСОБНОСТЬ
+  function logOut() {
     setIsLoggedIn(!isLoggedIn);
     removeName();
     removeUserCards();
@@ -240,8 +242,9 @@ export default function App() {
                       handlePopupSignUnOpen={handlePopupSignUnOpen}
                     />
 
-                    <NewsNotFound 
-                      isNewsNotFoundVisible={newsNotFoundVisibility}
+                    <NewsError 
+                      isNewsErrorVisible={NewsErrorVisibility}
+                      newsLoadingError={newsLoadingError}
                     />
 
                     <About/>
