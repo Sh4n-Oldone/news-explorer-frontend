@@ -18,6 +18,8 @@ import SavedCardsContext from '../../context/SavedCardsContext';
 import * as mainApi from '../../utils/MainApi.js';
 import * as newsApi from '../../utils/NewsApi.js';
 import { getToken, removeToken } from '../../utils/token';
+import { setName, getName, removeName } from '../../utils/userStorage';
+import { setUserCards, getUserCards, removeUserCards } from '../../utils/cardsStorage';
 import ProtectedRoute from '../../utils/ProtectedRoute';
 
 
@@ -74,6 +76,10 @@ export default function App() {
       setIsLoggedIn(true);
       setIsLogInError(false);
       closeAllPopups();
+      if (getUserCards() && getUserCards() !== null) {
+        getDataFromStorage();
+      }
+      
       return getDataFromMainApi(jwt);
     };
   }
@@ -87,6 +93,7 @@ export default function App() {
       await newsApi.getNews(keyword).then((data) => {
         setCardsCounter(3);
         setNewsCards(data.articles);
+        setUserCards(data.articles);
         hideLoader();
         if (data.articles.length === 0) {
           showNewsNotFound();
@@ -105,6 +112,7 @@ export default function App() {
       await mainApi.getUserData(token)
         .then((res) => {
           setCurrentUserName(res.name);
+          setName(res.name);
         })
     } catch (error) {
       console.log(error);
@@ -127,6 +135,12 @@ export default function App() {
   function getDataFromMainApi(token) {
     getUserName(token);
     getArticles(token);
+  }
+
+  function getDataFromStorage() {
+    setCurrentUserName(getName());
+    setNewsCards(JSON.parse(getUserCards()));
+    showNewsCardList();
   }
 
   function registration({email, password, name}) {
@@ -156,8 +170,10 @@ export default function App() {
       .catch(error => {console.log(error)});
   }
 
-  function logOut() {
+  function logOut() { // ПРОВЕРИТЬ РАБОТОСПОСОБНОСТЬ
     setIsLoggedIn(!isLoggedIn);
+    removeName();
+    removeUserCards();
     removeToken();
   }
 
