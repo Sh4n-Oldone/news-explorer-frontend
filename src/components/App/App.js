@@ -32,7 +32,6 @@ export default function App() {
 
   const [newsCards, setNewsCards] = useState([]);
   const [savedCards, setSavedCards] = useState([]);
-  const [tagsArr, setTagsArr] = useState([]);
 
   const [searchTag, setSearchTag] = useState('');
 
@@ -118,10 +117,6 @@ export default function App() {
           const tags = [];
           setSavedCards(data);
           savedCards.map((card) => tags.includes(card.keyword) ? '' : tags.push(card.keyword));
-          return tags;
-        })
-        .then((tags) => {
-          setTagsArr(tags);
         })
     } catch (error) {
       console.log(error);
@@ -237,7 +232,6 @@ export default function App() {
                     loggedIn={isLoggedIn}
                     componentFirst={SavedNewsTitles}
                     componentSecond={NewsCardList}
-                    tagsArr={tagsArr}
                     isNewsCardListVisible={newsVisibility} 
                     isLoggedIn={isLoggedIn} 
                     cardsArray={newsCards}
