@@ -179,7 +179,9 @@ export default function App() {
           handlePopupSuccessOpen();
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        setIsInputDisabled(false);
+      });
   }
 
   function logIn({email, password}, setIsInputDisabled) {
@@ -194,7 +196,9 @@ export default function App() {
           closeAllPopups();
         }
       })
-      .catch(error => {console.log(error)});
+      .catch(error => {
+        setIsInputDisabled(false);
+      });
   }
 
   function logOut() {
