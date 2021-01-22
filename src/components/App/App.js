@@ -107,10 +107,26 @@ export default function App() {
       });
       
     } catch (error) {
-      if (error.status === 400) {setNewsLoadingError('Ошибка параметров запроса')}
-      if (error.status === 401) {setNewsLoadingError('Неавторизованный доступ к API')}
-      if (error.status === 429) {setNewsLoadingError('Слишком много запросов')}
-      if (error.status === 500) {setNewsLoadingError('Сервер поиска временно недоступен')}
+      if (error.status === 400) {
+        hideLoader();
+        setNewsLoadingError('Ошибка параметров запроса');
+        showNewsError();
+      }
+      if (error.status === 401) {
+        hideLoader();
+        setNewsLoadingError('Неавторизованный доступ к API');
+        showNewsError();
+      }
+      if (error.status === 429) {
+        hideLoader();
+        setNewsLoadingError('Слишком много запросов');
+        showNewsError();
+      }
+      if (error.status === 500) {
+        hideLoader();
+        setNewsLoadingError('Сервер поиска временно недоступен');
+        showNewsError();
+      }
     }
   }
 
