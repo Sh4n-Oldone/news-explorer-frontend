@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../../utils/button-style__reset.css';
 import './NewsCardList.css';
 import CardsContext from '../../context/CardsContext';
@@ -9,64 +9,71 @@ import SavedCardsContext from '../../context/SavedCardsContext';
 export default function NewsCardList({
   isNewsCardListVisible, 
   isLoggedIn, 
-  onCardClick, 
-  onLikeClick}) {
+  cardsArray, 
+  cardsCounter, 
+  setCardsCounter, 
+  handleSaveCardClick, 
+  handleRemoveCardClick,
+  isCardSaved,
+  handlePopupSignUnOpen}) {
 
-  const [showMoreCards, setShowMoreCards] = useState(false);
-
-  const location = useLocation();
+  let location = useLocation();
 
   function clickMe() {
-    setShowMoreCards(true);
+    setCardsCounter(cardsCounter + 3);
   }
 
   return (
 
-    <section className={`news${ isNewsCardListVisible ? '' : ' news__hidden'}`}>
+    <section className={`news${ !isNewsCardListVisible && location.pathname!=='/saved-news' ? ' news__hidden' : '' }`}>
 
-      {location.pathname!=='/saved-news'
-        ? <>
-            <h2 className='news__title'>Результаты поиска</h2>
-            <CardsContext.Consumer>
-              {cards =>
-                <section className='news-cards'>
-                  <ul className='news-cards__list'>
-                    {cards.slice(0, showMoreCards || location.pathname==='/saved-news' ? cards.length : 3).map(card =>
-                      <NewsCard {...card}
-                            key={card._id} //Не факт, что будет id в api
-                            onCardClick={onCardClick} 
-                            onSaveClick={onLikeClick} 
-                            isLoggedIn={isLoggedIn} 
-                      />
-                    )}
-                  </ul>
-                </section>
-              }
-            </CardsContext.Consumer>
-            <button 
-              className='button-style__reset news__button-more-news' 
-              onClick={clickMe}
-            >Показать ещё</button>
-          </>
-        : <>
-            <SavedCardsContext.Consumer>
-              {cards =>
-                <section className='news-cards'>
-                  <ul className='news-cards__list'>
-                    {cards.map(card =>
-                      <NewsCard {...card}
-                            key={card._id} //Не факт, что будет id в api
-                            onCardClick={onCardClick} 
-                            onSaveClick={onLikeClick} 
-                            isLoggedIn={isLoggedIn} 
-                      />
-                    )}
-                  </ul>
-                </section>
-              }
-            </SavedCardsContext.Consumer>
-          </>
-      }
+        <div className={`news-block${location.pathname==='/saved-news' ? ' news-block_hidden' : ''}`}>
+          <h2 className='news__title'>Результаты поиска</h2>
+          <CardsContext.Consumer>
+            {cards =>
+              <section className='news-cards'>
+                <ul className='news-cards__list'>
+                  {cards.slice(0, cardsCounter).map(card =>
+                    <NewsCard {...card}
+                          key={card.url}
+                          onSaveClick={handleSaveCardClick} 
+                          isLoggedIn={isLoggedIn} 
+                          isCardSaved={isCardSaved}
+                          handlePopupSignUnOpen={handlePopupSignUnOpen}
+                    />
+                  )}
+                </ul>
+              </section>
+            }
+          </CardsContext.Consumer>
+          <button 
+            className={`button-style__reset news__button-more-news${
+              cardsCounter < cardsArray.length
+              ? ''
+              : ' news__button-more-news_hidden'
+            }`} 
+            onClick={clickMe}
+          >Показать ещё</button>
+        </div>
+        <div className={`news-block${location.pathname==='/saved-news' ? '' : ' news-block_hidden'}`}>
+          <SavedCardsContext.Consumer>
+            {cards =>
+              <section className='news-cards'>
+                <ul className='news-cards__list'>
+                  {cards.map(card =>
+                    <NewsCard {...card}
+                          key={cards.findIndex(element => element === card)}
+                          onSaveClick={handleSaveCardClick} 
+                          onRemoveClick={handleRemoveCardClick}
+                          isLoggedIn={isLoggedIn} 
+                          tag={card.keyword}
+                    />
+                  )}
+                </ul>
+              </section>
+            }
+          </SavedCardsContext.Consumer>
+        </div>
       
     </section>
   

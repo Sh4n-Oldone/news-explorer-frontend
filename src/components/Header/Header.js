@@ -4,7 +4,7 @@ import Navigation from '../Navigation/Navigation';
 import BurgerHeaderNav from '../BurgerHeaderNav/BurgerHeaderNav';
 import './Header.css';
 
-export default function Header({isLoggedIn, currentUserName, handleLogInButton}) {
+export default function Header({isLoggedIn, handleLogInButton, onExit}) {
 
   const location = useLocation();
   const [makeHeaderWhite, setMakeHeaderWhite] = useState(true)
@@ -19,13 +19,13 @@ export default function Header({isLoggedIn, currentUserName, handleLogInButton})
 
   // создание таймера до выполнения принятой функции
   // чтобы было меньше рендеров на странице
-  function debounce(fn, ms) {
+  function debounce(func, ms) {
     let timer
     return _ => {
       clearTimeout(timer)
       timer = setTimeout(_ => {
         timer = null
-        fn.apply(this, arguments)
+        func.apply(this, arguments)
       }, ms)
     };
   }
@@ -34,9 +34,8 @@ export default function Header({isLoggedIn, currentUserName, handleLogInButton})
     const debouncedHandleResize = debounce(function resize() {
       setScreenWidth(window.innerWidth)
     }, 50)
-    // 50 количество милисекунд, после которого 
+    // 50 - количество милисекунд, после которого 
     // прочитается значение window.innerWidth и запишется в стейт
-
     window.addEventListener('resize', debouncedHandleResize)
     return _ => {
       window.removeEventListener('resize', debouncedHandleResize)
@@ -44,26 +43,30 @@ export default function Header({isLoggedIn, currentUserName, handleLogInButton})
   }, [screenWidth])
 
   return (
-    <>
-      <header className='header'>
-        <h1 className={`header__title${makeHeaderWhite && location.pathname==='/saved-news' ? ' header__title_dark-mode' : ''}`}>NewsExplorer</h1>
 
-        { screenWidth<631
+      <header className='header'>
+        <h1 
+          className={`header__title${makeHeaderWhite && location.pathname==='/saved-news' 
+          ? ' header__title_dark-mode' 
+          : ''
+          }`}
+        >NewsExplorer</h1>
+
+        { screenWidth<631 || window.innerWidth<631
           ? <BurgerHeaderNav 
-              isLoggedIn={isLoggedIn}
-              currentUserName={currentUserName}
-              handleLogInButton={handleLogInButton}
-              changeHeaderToDark={changeHeaderToDark}
-              changeHeaderToWhite={changeHeaderToWhite}
+              isLoggedIn={isLoggedIn} 
+              handleLogInButton={handleLogInButton} 
+              changeHeaderToDark={changeHeaderToDark} 
+              changeHeaderToWhite={changeHeaderToWhite} 
+              onExit={onExit} 
             />
           : <Navigation
               isLoggedIn={isLoggedIn} 
-              currentUserName={currentUserName} 
-              handleLogInButton={handleLogInButton}
+              handleLogInButton={handleLogInButton} 
+              onExit={onExit} 
             />
         }
-
       </header>
-    </>
+
   );
 }

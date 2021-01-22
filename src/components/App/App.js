@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import configData from '../../utils/config.json';
 import Header from '../Header/Header.js';
 import Main from '../Main/Main.js';
 import Preloader from '../Preloader/Preloader';
 import NewsCardList from '../NewsCardList/NewsCardList';
 import About from '../About/About';
-import NewsNotFound from '../NewsNotFound/NewsNotFound.js';
+import NewsError from '../NewsError/NewsError.js';
 import PopupLogIn from '../PopupLogIn/PopupLogIn.js';
 import PopupSignUp from '../PopupSignUp/PopupSignUp.js';
 import PopupSuccess from '../PopupSuccess/PopupSuccess.js';
@@ -15,146 +16,221 @@ import { Switch, Route } from 'react-router-dom';
 import CurrentUserContext from '../../context/CurrentUserContext';
 import CardsContext from '../../context/CardsContext';
 import SavedCardsContext from '../../context/SavedCardsContext';
-import testImg from '../../images/test-card-image.png';
+import * as mainApi from '../../utils/MainApi.js';
+import * as newsApi from '../../utils/NewsApi.js';
+import { getToken, removeToken } from '../../utils/token';
+import { setName, getName, removeName } from '../../utils/userStorage';
+import { setUserCards, getUserCards, removeUserCards } from '../../utils/cardsStorage';
+import ProtectedRoute from '../../utils/ProtectedRoute';
 
 
 export default function App() {
 
-  // Временные состояния для тестирования хэдера
-  const [currentUserName, setCurrentUserName] = useState('Грета');
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [currentUserName, setCurrentUserName] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Для тестирования перевести нужные дефолтные значения стейтов в true
   const [loaderVisibility, setLoaderVisibility] = useState(false);
-  const [newsVisibility, setNewsVisibility] = useState(true);
-  const [newsNotFoundVisibility, setNewsNotFoundVisibility] = useState(false);
+  const [newsVisibility, setNewsVisibility] = useState(false);
+  const [NewsErrorVisibility, setNewsErrorVisibility] = useState(false);
+  const [newsLoadingError, setNewsLoadingError] = useState('');
 
-  // При дальнейшей разработке заменить дефолтное значение на пустой массив []
-  const [newsCards, setNewsCards] = useState([
-    {
-      image: testImg,
-      date: '2 августа, 2019',
-      title: 'Национальное достояние – парки',
-      subtitle: 'В 2016 году Америка отмечала важный юбилей: сто лет назад здесь начала складываться система национальных парков – охраняемых территорий, где и сегодня каждый может приобщиться к природе.',
-      source: 'Лента.ру',
-      _id: '1', 
-      isSaved: false,
-    },
-    {
-      image: testImg,
-      date: '3 августа, 2019',
-      title: 'Лесные огоньки: история одной фотографии',
-      subtitle: 'Фотограф отвлеклась от освещения суровой политической реальности Мексики, чтобы запечатлеть ускользающую красоту одного из местных чудес природы.',
-      source: 'Медуза',
-      _id: '2', 
-      isSaved: false,
-    },
-    {
-      image: testImg,
-      date: '4 августа, 2019',
-      title: '«Первозданная тайга»: новый фотопроект Игоря Шпиленка',
-      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
-      source: 'Медуза',
-      _id: '3', 
-      isSaved: true,
-    },
-    {
-      image: testImg,
-      date: '17 августа, 2020',
-      title: '«Первозданная тайга»: новый фотопроект Игоря Шпиленка asdasdasdasd',
-      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
-      source: 'Риа',
-      _id: '4', 
-      isSaved: true,
-    },
-    {
-      image: testImg,
-      date: '30 августа, 2019',
-      title: 'Первозданная тайга',
-      subtitle: 'Знаменитый фотограф снимает первозданные леса России, чтобы рассказать о необходимости их сохранения. В этот раз он отправился в Двинско-Пинежскую тайгу, где...',
-      source: 'Риа',
-      _id: '5', 
-      isSaved: false,
-    }
-  ]);
+  const [newsCards, setNewsCards] = useState([]);
+  const [savedCards, setSavedCards] = useState([]);
 
-  const [searchTag, setSearchTag] = useState(''); // Добавление этого стейта к загружаемой карточке
+  const [searchTag, setSearchTag] = useState('');
 
-  // дефолтные стейты попапов
   const [isPopupLogInOpen, setIsPopupLogInOpen] = useState(false);
   const [isPopupSignUpOpen, setIsPopupSignUpOpen] = useState(false);
   const [isPopupSuccessfullRegister, setIsPopupSuccessfullRegister] = useState(false);
 
-  function handlePopupLogInOpen() {
-    setIsPopupLogInOpen(true);
-  }
+  const [cardsCounter, setCardsCounter] = useState(3);
 
-  function handlePopupSignInOpen() {
-    setIsPopupSignUpOpen(true);
-  }
+  const [isRegisterError, setIsRegisterError] = useState(false);
+  const [isLogInError, setIsLogInError] = useState(false);
 
-  function handlePopupSuccessOpen() {
-    setIsPopupSuccessfullRegister(true);
-  }
+  function handlePopupLogInOpen() { setIsPopupLogInOpen(true); }
+  function handlePopupSignUnOpen() { setIsPopupSignUpOpen(true); }
+  function handlePopupSignUnClose() { setIsPopupSignUpOpen(false); }
+  function handlePopupSuccessOpen() { setIsPopupSuccessfullRegister(true); }
 
-  // Функция закрытия попапов
   function closeAllPopups() {
     setIsPopupLogInOpen(false);
     setIsPopupSignUpOpen(false);
     setIsPopupSuccessfullRegister(false);
   }
 
-  function handleSearchTag(tag) {
-    setSearchTag(tag);
+  function showLoader() { setLoaderVisibility(true); }
+  function hideLoader() { setLoaderVisibility(false); }
+  function showNewsCardList() { setNewsVisibility(true); }
+  function hideNewsCardList() { setNewsVisibility(false); }
+  function showNewsError() { setNewsErrorVisibility(true); }
+  function hideNewsError() { setNewsErrorVisibility(false); }
+  function showRegistrationError() { setIsRegisterError(true); }
+
+  function tokenCheck() {
+    const jwt = getToken();
+
+    if (!jwt) {
+      return;
+    };
+
+    if (jwt) {
+      setIsLoggedIn(true);
+      setIsLogInError(false);
+      closeAllPopups();
+      if (getUserCards() && getUserCards() !== null) {
+        getDataFromStorage();
+      }
+      
+      return getDataFromMainApi(jwt);
+    };
   }
 
-  // Наброски рабочих функций
-  function showLoader() {
-    // по нажатию на кнопку "Искать" включает отображение блока с аниманией загрузки
-    setLoaderVisibility(true);
-  }
-  function hideLoader() {
-    // по ДЕЙСТВИЕ выключает отображение блока с аниманией загрузки
-    setLoaderVisibility(false);
-  }
-  function showNewsCardList() {
-    // Отобразить блок карточек
-    setNewsVisibility(true);
-  }
-  function hideNewsCardList() {
-    // Скрыть блок карточек
-    setNewsVisibility(false);
-  }
-  function showNewsNotFound() {
-    // Отобразить блок с ошибкой Not Found
-    setNewsNotFoundVisibility(true);
-  }
-  function hideNewsNotFound() {
-    // Скрыть блок с ошибкой Not Found
-    setNewsNotFoundVisibility(false);
-  }
-
-  function getDataFromNewsApi() {
+  async function getDataFromNewsApi(keyword, setIsInputDisabled) {
     try {
-      // showLoader();
-      // await newsApi().then((data) => {
-      //   //записать данные в стейты
-      //   //записать карточки в стейт карточек
-      //   hideLoader();
-      // })
+      hideNewsCardList();
+      hideNewsError();
+      showLoader();
+      setIsInputDisabled(true);
+      await newsApi.getNews(keyword).then((data) => {
+        setCardsCounter(configData.CARDS_COUNTER);
+        setNewsCards(data.articles);
+        setUserCards(data.articles);
+        hideLoader();
+        setIsInputDisabled(false);
+        if (data.articles.length === 0) {
+          setNewsLoadingError('Ничего не найдено');
+          showNewsError();
+        } else {
+          showNewsCardList();
+        }
+      });
       
     } catch (error) {
-      
+      if (error.status === 400) {
+        hideLoader();
+        setNewsLoadingError('Ошибка параметров запроса');
+        showNewsError();
+      }
+      if (error.status === 401) {
+        hideLoader();
+        setNewsLoadingError('Неавторизованный доступ к API');
+        showNewsError();
+      }
+      if (error.status === 429) {
+        hideLoader();
+        setNewsLoadingError('Слишком много запросов');
+        showNewsError();
+      }
+      if (error.status === 500) {
+        hideLoader();
+        setNewsLoadingError('Сервер поиска временно недоступен');
+        showNewsError();
+      }
     }
   }
 
-  function handleCardClick() {
-    // При клике на новость должна открываться вкладка по ссылке на эту новость, наверное
+  async function getUserName(token) {
+    try {
+      await mainApi.getUserData(token)
+        .then((res) => {
+          setCurrentUserName(res.name);
+          setName(res.name);
+        })
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  function handleSaveCardClick() {
-    // Карточка добавляется в сохранённые
+  async function getArticles(token) {
+    try {
+      await mainApi.getArticles(token)
+        .then((data) => {
+          const tags = [];
+          setSavedCards(data);
+          savedCards.map((card) => tags.includes(card.keyword) ? '' : tags.push(card.keyword));
+        })
+    } catch (error) {
+      console.log(error);
+    }
   }
+
+  function getDataFromMainApi(token) {
+    getUserName(token);
+    getArticles(token);
+  }
+
+  function getDataFromStorage() {
+    setCurrentUserName(getName());
+    setNewsCards(JSON.parse(getUserCards()));
+    showNewsCardList();
+  }
+
+  function registration({email, password, name}, setIsInputDisabled) {
+    setIsInputDisabled(true);
+    mainApi.register(email, password, name)
+      .then((data) => {
+        setIsInputDisabled(false);
+        if(data.error || !data) {
+          showRegistrationError();
+        }
+        if (data && !data.error) {
+          handlePopupSignUnClose();
+          handlePopupSuccessOpen();
+        }
+      })
+      .catch(err => {
+        setIsInputDisabled(false);
+      });
+  }
+
+  function logIn({email, password}, setIsInputDisabled) {
+    setIsInputDisabled(true);
+    mainApi.authorize(email, password)
+      .then((data) => {
+        setIsInputDisabled(false);
+        if (!data) {
+          setIsLogInError(true);
+        } else {
+          tokenCheck();
+          closeAllPopups();
+        }
+      })
+      .catch(error => {
+        setIsInputDisabled(false);
+      });
+  }
+
+  function logOut() {
+    setIsLoggedIn(!isLoggedIn);
+    removeName();
+    removeUserCards();
+    removeToken();
+  }
+
+  function handleSaveCardClick(card, setIsCardSaved) {
+    const jwt = getToken();
+    const keyword = searchTag;
+    mainApi.createArticles(jwt, keyword, card)
+      .then((newCard) => {
+        setSavedCards([...savedCards, newCard]);
+        setIsCardSaved(true);
+      })
+      .catch(err => {console.log(err)});
+  }
+
+  function handleRemoveCardClick(card, setHideCard) {
+    const jwt = getToken();
+
+    mainApi.removeArticles(jwt, card)
+      .then((answer) => {setHideCard(true)})
+      .catch(err => {console.log(err)})
+
+  }
+
+  useEffect(() => {
+    tokenCheck();
+  }, []);
 
   return (
     <div className='App'>
@@ -163,13 +239,12 @@ export default function App() {
 
           <CurrentUserContext.Provider value={currentUserName}>
             <CardsContext.Provider value={newsCards}>
-              <SavedCardsContext.Provider value={newsCards}>
-                {/* В дальнейшем для сохранённых карточек надо будет сделать свой стейт, в который будут выгружаться данные из базы */}
+              <SavedCardsContext.Provider value={savedCards}>
 
                 <Header
                   isLoggedIn={isLoggedIn} 
-                  currentUserName={currentUserName} 
                   handleLogInButton={handlePopupLogInOpen}
+                  onExit={logOut}
                 />
                 
                 <Switch>
@@ -177,8 +252,8 @@ export default function App() {
                   <Route exact path='/'>
 
                     <Main
-                      showLoader={showLoader}
-                      // loadingNewsApi={getDataFromNewsApi} // заменить этим showLoader
+                      loadingNewsApi={getDataFromNewsApi}
+                      setSearchTag={setSearchTag}
                     />
 
                     <Preloader
@@ -188,32 +263,36 @@ export default function App() {
                     <NewsCardList
                       isNewsCardListVisible={newsVisibility} 
                       isLoggedIn={isLoggedIn} 
-                      onCardClick={handleCardClick} 
-                      onLikeClick={handleSaveCardClick} 
+                      cardsArray={newsCards}
+                      cardsCounter={cardsCounter}
+                      setCardsCounter={setCardsCounter}
+                      handleSaveCardClick={handleSaveCardClick}
+                      handleRemoveCardClick={handleRemoveCardClick}
+                      handlePopupSignUnOpen={handlePopupSignUnOpen}
                     />
 
-                    <NewsNotFound 
-                      isNewsNotFoundVisible={newsNotFoundVisibility}
+                    <NewsError 
+                      isNewsErrorVisible={NewsErrorVisibility}
+                      newsLoadingError={newsLoadingError}
                     />
 
                     <About/>
 
                   </Route>
 
-                  <Route path='/saved-news'>
-
-                    <SavedNewsTitles 
-                      currentUserName={currentUserName} 
-                    />
-
-                    <NewsCardList
-                      isNewsCardListVisible={newsVisibility} 
-                      isLoggedIn={isLoggedIn} 
-                      onCardClick={handleCardClick} 
-                      onLikeClick={handleSaveCardClick} 
-                    />
-
-                  </Route>
+                  <ProtectedRoute path='/saved-news' 
+                    loggedIn={isLoggedIn}
+                    componentFirst={SavedNewsTitles}
+                    componentSecond={NewsCardList}
+                    isNewsCardListVisible={newsVisibility} 
+                    isLoggedIn={isLoggedIn} 
+                    cardsArray={newsCards}
+                    cardsCounter={cardsCounter}
+                    setCardsCounter={setCardsCounter}
+                    handleSaveCardClick={handleSaveCardClick}
+                    handleRemoveCardClick={handleRemoveCardClick}
+                    handlePopupLogInOpen={handlePopupLogInOpen}
+                  />
 
                 </Switch>
                 
@@ -222,14 +301,17 @@ export default function App() {
                 <PopupLogIn 
                   isOpen={isPopupLogInOpen} 
                   onClose={closeAllPopups} 
-                  handleSignUpButton={handlePopupSignInOpen}
+                  handleSignUpButton={handlePopupSignUnOpen}
+                  isLogInError={isLogInError}
+                  logIn={logIn}
                 />
 
                 <PopupSignUp
                   isOpen={isPopupSignUpOpen}
                   onClose={closeAllPopups}
                   handleLogIn={handlePopupLogInOpen}
-                  handleSuccess={handlePopupSuccessOpen}
+                  registration={registration}
+                  isRegisterError={isRegisterError}
                 />
 
                 <PopupSuccess 

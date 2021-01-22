@@ -1,5 +1,8 @@
 # Фронт-часть проекта "NewsExplorer"
 
+* [Ссылка на страницу](https://alpavlov.students.nomoreparties.space/)
+* [Ссылка на репозиторий](https://github.com/Sh4n-Oldone/news-explorer-frontend)
+
 ## Пути
 
 > / - главная

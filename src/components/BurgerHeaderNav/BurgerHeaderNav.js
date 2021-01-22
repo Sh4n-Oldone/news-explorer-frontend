@@ -3,14 +3,15 @@ import { NavLink, useLocation } from 'react-router-dom';
 import '../../utils/button-style__reset.css';
 import './BurgerHeaderNav.css';
 import LogOutButton from '../LogOutButton/LogOutButton.js';
+import CurrentUserContext from '../../context/CurrentUserContext'
 
 export default function BurgerHeaderNav(
   {
     isLoggedIn, 
-    currentUserName, 
     handleLogInButton, 
     changeHeaderToDark, 
-    changeHeaderToWhite 
+    changeHeaderToWhite, 
+    onExit 
   }) {
   
   const location = useLocation();
@@ -66,15 +67,20 @@ export default function BurgerHeaderNav(
             >Сохранённые статьи</NavLink>
           </li>
         </ul>
-        <button 
-          className='button-style__reset burger__auth_button'
-          onClick={handleLogInButton}
-        >
-          {isLoggedIn 
-            ? <LogOutButton name={currentUserName}/> 
-            : 'Авторизоваться'
+
+        <CurrentUserContext.Consumer>
+          {value =>
+            <button 
+              className='button-style__reset burger__auth_button'
+              onClick={isLoggedIn ? onExit : handleLogInButton}
+            >
+              {isLoggedIn 
+                ? <LogOutButton name={value}/> 
+                : 'Авторизоваться'
+              }
+            </button>
           }
-        </button>
+        </CurrentUserContext.Consumer>
 
       </div>
 
