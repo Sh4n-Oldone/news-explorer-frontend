@@ -62,7 +62,7 @@ export default function NewsCardList({
                 <ul className='news-cards__list'>
                   {cards.map(card =>
                     <NewsCard {...card}
-                          key={cards.findIndex(element => element === card)}
+                          key={card._id}
                           onSaveClick={handleSaveCardClick} 
                           onRemoveClick={handleRemoveCardClick}
                           isLoggedIn={isLoggedIn} 
