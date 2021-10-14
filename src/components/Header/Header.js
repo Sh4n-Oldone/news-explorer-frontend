@@ -5,7 +5,6 @@ import BurgerHeaderNav from '../BurgerHeaderNav/BurgerHeaderNav';
 import './Header.css';
 
 export default function Header({isLoggedIn, handleLogInButton, onExit}) {
-
   const location = useLocation();
   const [makeHeaderWhite, setMakeHeaderWhite] = useState(true)
   const [screenWidth, setScreenWidth] = useState(1400)

@@ -20,10 +20,10 @@ export default function Footer() {
           <li className='footer__links_item'>
             <a
               className='footer__links_link'
-              href='https://praktikum.yandex.ru/' 
+              href='https://www.linkedin.com/feed/update/urn:li:activity:6846447949069774848/' 
               target='_blank' 
               rel="noreferrer"
-            >Яндекс.Практикум</a>
+            >Сопроводительное</a>
           </li>
         </ul>
         <a
@@ -38,7 +38,7 @@ export default function Footer() {
           />
         </a>
         <a
-          href='https://www.linkedin.com/in/aleksandr-pavlov-1018b91b6/' 
+          href='https://www.linkedin.com/in/pavlov-alex/' 
           target='_blank' 
           rel="noreferrer"
         >
